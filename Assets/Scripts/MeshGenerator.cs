@@ -22,28 +22,29 @@ public class MeshGenerator : MonoBehaviour
 
         _mesh = new Mesh();
         _meshFilter.mesh = _mesh;
-        
+
         CreateMesh();
         UpdateMesh();
     }
 
     private void Update()
     {
-        
     }
 
     private void CreateMesh()
     {
         _vertices = new[]
         {
-            new Vector3(0,0,0),
-            new Vector3(0,0,1),
-            new Vector3(1,0,0)
+            new Vector3(0, 0, 0),
+            new Vector3(0, 0, 1),
+            new Vector3(1, 0, 0),
+            new Vector3(1, 0, 1)
         };
 
         _triangles = new[]
         {
-            0, 1, 2
+            0, 1, 2,
+            1, 3, 2
         };
     }
 
