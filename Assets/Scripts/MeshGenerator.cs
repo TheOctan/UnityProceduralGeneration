@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
@@ -29,21 +30,6 @@ public class MeshGenerator : MonoBehaviour
     private void Update()
     {
         
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-
-        if (_vertices == null)
-        {
-            return;
-        }
-
-        for (int i = 0; i < _vertices.Length; i++)
-        {
-            Gizmos.DrawLine(_vertices[i], _mesh.normals[i]);
-        }
     }
 
     private void CreateMesh()

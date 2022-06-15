@@ -313,6 +313,7 @@ GameObject:
   - component: {fileID: 1845612267}
   - component: {fileID: 1845612266}
   - component: {fileID: 1845612265}
+  - component: {fileID: 1845612268}
   m_Layer: 0
   m_Name: Mesh Generator
   m_TagString: Untagged
@@ -367,7 +368,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -397,3 +398,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1845612262}
   m_Mesh: {fileID: 0}
+--- !u!114 &1845612268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1845612262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21b7226accb8b9b44a5fd484add4ca7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _color: {r: 1, g: 0, b: 0, a: 1}
+  _lenght: 0.5
