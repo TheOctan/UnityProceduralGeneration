@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
-public class MeshGenerator : MonoBehaviour
+public class QuadGenerator : MonoBehaviour
 {
     private MeshFilter _meshFilter;
 

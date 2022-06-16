@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 70934484}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44402242, g: 0.49316543, b: 0.5722324, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -312,7 +312,7 @@ GameObject:
   - component: {fileID: 1845612264}
   - component: {fileID: 1845612267}
   - component: {fileID: 1845612266}
-  - component: {fileID: 1845612265}
+  - component: {fileID: 1845612269}
   - component: {fileID: 1845612268}
   m_Layer: 0
   m_Name: Mesh Generator
@@ -336,18 +336,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1845612265
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1845612262}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f961c03a45f0cde428fa8a86927d5d25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!23 &1845612266
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -413,3 +401,15 @@ MonoBehaviour:
   _color: {r: 1, g: 0, b: 0, a: 1}
   _lenght: 0.5
   _drawWithSelected: 0
+--- !u!114 &1845612269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1845612262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f961c03a45f0cde428fa8a86927d5d25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
