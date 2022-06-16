@@ -1,14 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
-public class MeshGenerator : MonoBehaviour
+public class QuadGenerator : MonoBehaviour
 {
     private MeshFilter _meshFilter;
-    private MeshRenderer _meshRenderer;
 
     private Mesh _mesh;
 
@@ -18,17 +13,12 @@ public class MeshGenerator : MonoBehaviour
     private void Awake()
     {
         _meshFilter = GetComponent<MeshFilter>();
-        _meshRenderer = GetComponent<MeshRenderer>();
 
         _mesh = new Mesh();
         _meshFilter.mesh = _mesh;
 
         CreateMesh();
         UpdateMesh();
-    }
-
-    private void Update()
-    {
     }
 
     private void CreateMesh()
