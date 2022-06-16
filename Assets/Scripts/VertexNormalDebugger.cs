@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
@@ -7,7 +6,6 @@ public class VertexNormalDebugger : MonoBehaviour
     [SerializeField] private Color _color = Color.red;
     [SerializeField, Min(0)] private float _lenght = 0.5f;
     [SerializeField] private bool _drawWithSelected;
-    
 
     private MeshFilter _meshFilter;
 
