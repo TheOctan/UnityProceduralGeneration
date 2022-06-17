@@ -1,79 +1,80 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-enum TextureType
+namespace _2_Procedural_texture
 {
-    Chess,
-    UV
-}
-
-public class TextureGenerator : MonoBehaviour
-{
-    [SerializeField] private Texture2D _texture;
-    [SerializeField, Range(2, 512)] private int _resolution = 128;
-    [SerializeField] private FilterMode _filterMode;
-    [SerializeField] private TextureWrapMode _wrapMode;
-    [SerializeField] private TextureType _type;
-
-    private void OnValidate()
+    public enum TextureType
     {
-        if (_texture == null)
-        {
-            _texture = new Texture2D(_resolution, _resolution);
-            GetComponent<Renderer>().sharedMaterial.mainTexture = _texture;
-        }
-
-        if (_texture.width != _resolution)
-        {
-            _texture.Reinitialize(_resolution, _resolution);
-        }
-
-        _texture.filterMode = _filterMode;
-        _texture.wrapMode = _wrapMode;
-
-        switch (_type)
-        {
-            case TextureType.Chess:
-                DrawChessTexture();
-                break;
-            case TextureType.UV:
-                DrawUVTexture();
-                break;
-        }
-
-        _texture.Apply();
+        Chess,
+        UV
     }
 
-    private void DrawChessTexture()
+    public class TextureGenerator : MonoBehaviour
     {
-        float step = 1f / _resolution;
+        [SerializeField] private Texture2D _texture;
+        [SerializeField, Range(2, 512)] private int _resolution = 128;
+        [SerializeField] private FilterMode _filterMode;
+        [SerializeField] private TextureWrapMode _wrapMode;
+        [SerializeField] private TextureType _type;
 
-        for (var y = 0; y < _resolution; y++)
+        private void OnValidate()
         {
-            for (var x = 0; x < _resolution; x++)
+            if (_texture == null)
             {
-                if (x % 2 == 0 && y % 2 == 0 || x % 2 != 0 && y % 2 != 0)
+                _texture = new Texture2D(_resolution, _resolution);
+                GetComponent<Renderer>().sharedMaterial.mainTexture = _texture;
+            }
+
+            if (_texture.width != _resolution)
+            {
+                _texture.Reinitialize(_resolution, _resolution);
+            }
+
+            _texture.filterMode = _filterMode;
+            _texture.wrapMode = _wrapMode;
+
+            switch (_type)
+            {
+                case TextureType.Chess:
+                    DrawChessTexture();
+                    break;
+                case TextureType.UV:
+                    DrawUVTexture();
+                    break;
+                default:
+                    Debug.LogError("Undefined type");
+                    break;
+            }
+
+            _texture.Apply();
+        }
+
+        private void DrawChessTexture()
+        {
+            for (var y = 0; y < _resolution; y++)
+            {
+                for (var x = 0; x < _resolution; x++)
                 {
-                    _texture.SetPixel(x, y, Color.black);
-                }
-                else
-                {
-                    _texture.SetPixel(x, y, Color.white);
+                    if (x % 2 == 0 && y % 2 == 0 || x % 2 != 0 && y % 2 != 0)
+                    {
+                        _texture.SetPixel(x, y, Color.black);
+                    }
+                    else
+                    {
+                        _texture.SetPixel(x, y, Color.white);
+                    }
                 }
             }
         }
-    }
 
-    private void DrawUVTexture()
-    {
-        float step = 1f / _resolution;
-        for (var y = 0; y < _resolution; y++)
+        private void DrawUVTexture()
         {
-            for (var x = 0; x < _resolution; x++)
+            float step = 1f / _resolution;
+            for (var y = 0; y < _resolution; y++)
             {
-                _texture.SetPixel(x, y, new Color((x + 0.5f)*step, (y + 0.5f)*step, 0f));
+                for (var x = 0; x < _resolution; x++)
+                {
+                    _texture.SetPixel(x, y, new Color((x + 0.5f) * step, (y + 0.5f) * step, 0f));
+                }
             }
         }
     }
