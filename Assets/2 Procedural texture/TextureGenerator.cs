@@ -9,7 +9,8 @@ namespace _2_Procedural_texture
         UV,
         NormalMap,
         Chess,
-        WhiteNoise
+        WhiteNoise,
+        PerlinNoise
     }
 
     public static class LinearConverter
@@ -66,29 +67,14 @@ namespace _2_Procedural_texture
         [Header("White noise")] [SerializeField]
         private int _seed;
 
+        [Header("Perlin noise")] [SerializeField, Min(0)]
+        private float _scale = 10;
+
         private Renderer _renderer;
 
         private void OnValidate()
         {
-            if (_texture == null)
-            {
-                _texture = new Texture2D(_resolution, _resolution);
-            }
-            if (_renderer == null)
-            {
-                _renderer = GetComponent<Renderer>();
-            }
-            if (_renderer.sharedMaterial.mainTexture == null)
-            {
-                _renderer.sharedMaterial.mainTexture = _texture;
-            }
-            if (_texture.width != _resolution)
-            {
-                _texture.Reinitialize(_resolution, _resolution);
-            }
-
-            _texture.filterMode = _filterMode;
-            _texture.wrapMode = _wrapMode;
+            InitTexture();
 
             switch (_type)
             {
@@ -104,13 +90,48 @@ namespace _2_Procedural_texture
                 case TextureType.WhiteNoise:
                     DrawWhiteNoise();
                     break;
+                case TextureType.PerlinNoise:
+                    DrawPerlinNoise();
+                    break;
                 default:
-                    Debug.LogError("Undefined type");
+                    Debug.LogError("Undefined type of texture");
                     break;
             }
 
             _texture.Apply();
         }
+
+        private void Reset()
+        {
+            _renderer.sharedMaterial.mainTexture = null;
+        }
+
+        private void InitTexture()
+        {
+            if (_texture == null)
+            {
+                _texture = new Texture2D(_resolution, _resolution);
+            }
+
+            if (_renderer == null)
+            {
+                _renderer = GetComponent<Renderer>();
+            }
+
+            if (_renderer.sharedMaterial.mainTexture == null)
+            {
+                _renderer.sharedMaterial.mainTexture = _texture;
+            }
+
+            if (_texture.width != _resolution)
+            {
+                _texture.Reinitialize(_resolution, _resolution);
+            }
+
+            _texture.filterMode = _filterMode;
+            _texture.wrapMode = _wrapMode;
+        }
+
         private void DrawUVTexture()
         {
             float step = 1f / _resolution;
@@ -154,14 +175,10 @@ namespace _2_Procedural_texture
         {
             TakeTextureSample((x, y) =>
             {
-                if (x % 2 == 0 && y % 2 == 0 || x % 2 != 0 && y % 2 != 0)
-                {
-                    _texture.SetPixel(x, y, Color.black);
-                }
-                else
-                {
-                    _texture.SetPixel(x, y, Color.white);
-                }
+                bool isEvenPosition = x % 2 == 0 && y % 2 == 0;
+                bool isOddPosition = x % 2 != 0 && y % 2 != 0;
+
+                _texture.SetPixel(x, y, (isEvenPosition || isOddPosition) ? Color.black : Color.white);
             });
         }
 
@@ -174,6 +191,24 @@ namespace _2_Procedural_texture
                 float randomValue = Random.value;
                 _texture.SetPixel(x, y, new Color(randomValue, randomValue, randomValue));
             });
+        }
+
+        private void DrawPerlinNoise()
+        {
+            TakeTextureSample((x, y) =>
+            {
+                _texture.SetPixel(x, y, CalculatePerlinColor(x, y));
+            });
+        }
+
+        private Color CalculatePerlinColor(int x, int y)
+        {
+            float xCoord = (x + 0.5f) / _resolution * _scale + _offset.x;
+            float yCoord = (y + 0.5f) / _resolution * _scale + _offset.y;
+
+            float sample = Mathf.PerlinNoise(xCoord, yCoord);
+
+            return new Color(sample, sample,sample);
         }
 
         private void TakeTextureSample(Action<int, int> sample)
