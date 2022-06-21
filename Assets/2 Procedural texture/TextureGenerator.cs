@@ -55,14 +55,33 @@ namespace _2_Procedural_texture
         [SerializeField] private TextureWrapMode _wrapMode;
         [SerializeField] private TextureType _type;
 
+        [Header("UV")] [SerializeField, Range(0, 1)]
+        private float _height;
+
+        [Header("Normal map")] [SerializeField, Min(0)]
+        private float _radius = 0.5f;
+
+        [SerializeField] private Vector2 _offset = new(0.5f, 0.5f);
+
+        [Header("White noise")] [SerializeField]
+        private int _seed;
+
+        private Renderer _renderer;
+
         private void OnValidate()
         {
             if (_texture == null)
             {
                 _texture = new Texture2D(_resolution, _resolution);
-                GetComponent<Renderer>().sharedMaterial.mainTexture = _texture;
             }
-
+            if (_renderer == null)
+            {
+                _renderer = GetComponent<Renderer>();
+            }
+            if (_renderer.sharedMaterial.mainTexture == null)
+            {
+                _renderer.sharedMaterial.mainTexture = _texture;
+            }
             if (_texture.width != _resolution)
             {
                 _texture.Reinitialize(_resolution, _resolution);
@@ -92,22 +111,43 @@ namespace _2_Procedural_texture
 
             _texture.Apply();
         }
-
         private void DrawUVTexture()
         {
             float step = 1f / _resolution;
             TakeTextureSample((x, y) =>
             {
-                _texture.SetPixel(x, y, new Color((x + 0.5f) * step, (y + 0.5f) * step, 0f));
+                _texture.SetPixel(x, y, new Color((x + 0.5f) * step, (y + 0.5f) * step, _height));
             });
         }
 
         private void DrawNormalMap()
         {
-            TakeTextureSample((x, y) =>
+            float step = 1f / _resolution;
+            float r2 = Mathf.Pow(_radius, 2);
+
+            for (var y = 0; y < _resolution; y++)
             {
-                _texture.SetPixel(x,y, Vector3.forward.ToColor());
-            });
+                float y1 = (y + 0.5f) * step - _offset.y;
+                float y2 = Mathf.Pow(y1, 2);
+
+                for (var x = 0; x < _resolution; x++)
+                {
+                    float x1 = (x + 0.5f) * step - _offset.x;
+                    float x2 = Mathf.Pow(x1, 2);
+
+                    if (x2 + y2 <= r2)
+                    {
+                        float z1 = Mathf.Sqrt(r2 - x2 - y2);
+                        Vector3 normal = new Vector3(x1, y1, z1).normalized;
+
+                        _texture.SetPixel(x, y, normal.ToColor());
+                    }
+                    else
+                    {
+                        _texture.SetPixel(x, y, Vector3.forward.ToColor());
+                    }
+                }
+            }
         }
 
         private void DrawChessTexture()
@@ -127,7 +167,7 @@ namespace _2_Procedural_texture
 
         private void DrawWhiteNoise()
         {
-            Random.InitState(0);
+            Random.InitState(_seed);
 
             TakeTextureSample((x, y) =>
             {
