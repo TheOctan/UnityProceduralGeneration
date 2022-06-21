@@ -52,8 +52,8 @@ namespace _2_Procedural_texture
     {
         [SerializeField] private Texture2D _texture;
         [SerializeField, Range(2, 512)] private int _resolution = 128;
-        [SerializeField] private FilterMode _filterMode;
-        [SerializeField] private TextureWrapMode _wrapMode;
+        [SerializeField] private FilterMode _filterMode = FilterMode.Bilinear;
+        [SerializeField] private TextureWrapMode _wrapMode = TextureWrapMode.Clamp;
         [SerializeField] private TextureType _type;
 
         [Header("UV")] [SerializeField, Range(0, 1)]
@@ -74,8 +74,50 @@ namespace _2_Procedural_texture
 
         private void OnValidate()
         {
-            InitTexture();
+            RegenerateTexture();
+        }
 
+        private void Reset()
+        {
+            _renderer.sharedMaterial.mainTexture = null;
+            RegenerateTexture();
+        }
+
+        private bool InitTexture()
+        {
+            if (_texture == null)
+            {
+                _texture = new Texture2D(_resolution, _resolution);
+            }
+
+            if (_renderer == null)
+            {
+                _renderer = GetComponent<Renderer>();
+            }
+
+            if (_renderer.sharedMaterial == null)
+            {
+                return false;
+            }
+
+            if (_renderer.sharedMaterial.mainTexture == null)
+            {
+                _renderer.sharedMaterial.mainTexture = _texture;
+            }
+
+            if (_texture.width != _resolution)
+            {
+                _texture.Reinitialize(_resolution, _resolution);
+            }
+
+            _texture.filterMode = _filterMode;
+            _texture.wrapMode = _wrapMode;
+
+            return true;
+        }
+
+        private void GenerateTexture()
+        {
             switch (_type)
             {
                 case TextureType.UV:
@@ -101,35 +143,14 @@ namespace _2_Procedural_texture
             _texture.Apply();
         }
 
-        private void Reset()
+        private void RegenerateTexture()
         {
-            _renderer.sharedMaterial.mainTexture = null;
-        }
-
-        private void InitTexture()
-        {
-            if (_texture == null)
+            if (!InitTexture())
             {
-                _texture = new Texture2D(_resolution, _resolution);
+                return;
             }
 
-            if (_renderer == null)
-            {
-                _renderer = GetComponent<Renderer>();
-            }
-
-            if (_renderer.sharedMaterial.mainTexture == null)
-            {
-                _renderer.sharedMaterial.mainTexture = _texture;
-            }
-
-            if (_texture.width != _resolution)
-            {
-                _texture.Reinitialize(_resolution, _resolution);
-            }
-
-            _texture.filterMode = _filterMode;
-            _texture.wrapMode = _wrapMode;
+            GenerateTexture();
         }
 
         private void DrawUVTexture()
