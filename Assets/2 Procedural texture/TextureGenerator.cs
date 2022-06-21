@@ -1,11 +1,14 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace _2_Procedural_texture
 {
     public enum TextureType
     {
         Chess,
-        UV
+        UV,
+        WhiteNoise
     }
 
     public class TextureGenerator : MonoBehaviour
@@ -40,6 +43,9 @@ namespace _2_Procedural_texture
                 case TextureType.UV:
                     DrawUVTexture();
                     break;
+                case TextureType.WhiteNoise:
+                    DrawWhiteNoise();
+                    break;
                 default:
                     Debug.LogError("Undefined type");
                     break;
@@ -50,30 +56,46 @@ namespace _2_Procedural_texture
 
         private void DrawChessTexture()
         {
-            for (var y = 0; y < _resolution; y++)
+            TakeTextureSample((x, y) =>
             {
-                for (var x = 0; x < _resolution; x++)
+                if (x % 2 == 0 && y % 2 == 0 || x % 2 != 0 && y % 2 != 0)
                 {
-                    if (x % 2 == 0 && y % 2 == 0 || x % 2 != 0 && y % 2 != 0)
-                    {
-                        _texture.SetPixel(x, y, Color.black);
-                    }
-                    else
-                    {
-                        _texture.SetPixel(x, y, Color.white);
-                    }
+                    _texture.SetPixel(x, y, Color.black);
                 }
-            }
+                else
+                {
+                    _texture.SetPixel(x, y, Color.white);
+                }
+            });
         }
 
         private void DrawUVTexture()
         {
             float step = 1f / _resolution;
+            TakeTextureSample((x, y) =>
+            {
+                _texture.SetPixel(x, y, new Color((x + 0.5f) * step, (y + 0.5f) * step, 0f));
+            });
+        }
+
+        private void DrawWhiteNoise()
+        {
+            Random.InitState(0);
+
+            TakeTextureSample((x, y) =>
+            {
+                float randomValue = Random.value;                
+                _texture.SetPixel(x,y, new Color(randomValue, randomValue, randomValue));
+            });
+        }
+
+        private void TakeTextureSample(Action<int, int> sample)
+        {
             for (var y = 0; y < _resolution; y++)
             {
                 for (var x = 0; x < _resolution; x++)
                 {
-                    _texture.SetPixel(x, y, new Color((x + 0.5f) * step, (y + 0.5f) * step, 0f));
+                    sample?.Invoke(x, y);
                 }
             }
         }
