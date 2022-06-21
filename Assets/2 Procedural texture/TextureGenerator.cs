@@ -6,9 +6,45 @@ namespace _2_Procedural_texture
 {
     public enum TextureType
     {
-        Chess,
         UV,
+        NormalMap,
+        Chess,
         WhiteNoise
+    }
+
+    public static class LinearConverter
+    {
+        public static Color ToColor(this Vector3 vector)
+        {
+            float r = CoordinateToColor(vector.x);
+            float g = CoordinateToColor(vector.y);
+            float b = CoordinateToColor(vector.z);
+
+            return new Color(r, g, b);
+        }
+
+        public static Vector3 ToVector(this Color color)
+        {
+            float x = ColorToCoordinate(color.r);
+            float y = ColorToCoordinate(color.g);
+            float z = ColorToCoordinate(color.b);
+
+            return new Vector3(x, y, z);
+        }
+
+        private static float CoordinateToColor(float value)
+        {
+            // XYZ => -1..1
+            // RGB => 0..1
+            return (value + 1) * 0.5f;
+        }
+
+        private static float ColorToCoordinate(float value)
+        {
+            // RGB => 0..1
+            // XYZ => -1..1
+            return (value * 2) - 1;
+        }
     }
 
     public class TextureGenerator : MonoBehaviour
@@ -37,11 +73,14 @@ namespace _2_Procedural_texture
 
             switch (_type)
             {
-                case TextureType.Chess:
-                    DrawChessTexture();
-                    break;
                 case TextureType.UV:
                     DrawUVTexture();
+                    break;
+                case TextureType.NormalMap:
+                    DrawNormalMap();
+                    break;
+                case TextureType.Chess:
+                    DrawChessTexture();
                     break;
                 case TextureType.WhiteNoise:
                     DrawWhiteNoise();
@@ -52,6 +91,23 @@ namespace _2_Procedural_texture
             }
 
             _texture.Apply();
+        }
+
+        private void DrawUVTexture()
+        {
+            float step = 1f / _resolution;
+            TakeTextureSample((x, y) =>
+            {
+                _texture.SetPixel(x, y, new Color((x + 0.5f) * step, (y + 0.5f) * step, 0f));
+            });
+        }
+
+        private void DrawNormalMap()
+        {
+            TakeTextureSample((x, y) =>
+            {
+                _texture.SetPixel(x,y, Vector3.forward.ToColor());
+            });
         }
 
         private void DrawChessTexture()
@@ -69,23 +125,14 @@ namespace _2_Procedural_texture
             });
         }
 
-        private void DrawUVTexture()
-        {
-            float step = 1f / _resolution;
-            TakeTextureSample((x, y) =>
-            {
-                _texture.SetPixel(x, y, new Color((x + 0.5f) * step, (y + 0.5f) * step, 0f));
-            });
-        }
-
         private void DrawWhiteNoise()
         {
             Random.InitState(0);
 
             TakeTextureSample((x, y) =>
             {
-                float randomValue = Random.value;                
-                _texture.SetPixel(x,y, new Color(randomValue, randomValue, randomValue));
+                float randomValue = Random.value;
+                _texture.SetPixel(x, y, new Color(randomValue, randomValue, randomValue));
             });
         }
 
