@@ -236,7 +236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _xSize: 20
-  _zSize: 1
+  _zSize: 20
 --- !u!1001 &255380484
 PrefabInstance:
   m_ObjectHideFlags: 0
