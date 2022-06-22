@@ -20,7 +20,7 @@ public class MeshGenerator : MonoBehaviour
         _mesh = new Mesh();
         _meshFilter.mesh = _mesh;
 
-        StartCoroutine(CreateMesh());
+        CreateMesh();
     }
 
     private void Update()
@@ -28,7 +28,7 @@ public class MeshGenerator : MonoBehaviour
         UpdateMesh();
     }
 
-    private IEnumerator CreateMesh()
+    private void CreateMesh()
     {
         _vertices = new Vector3[(_xSize + 1) * (_zSize + 1)];
 
@@ -49,8 +49,6 @@ public class MeshGenerator : MonoBehaviour
         {
             for (var x = 0; x < _xSize; x++)
             {
-                yield return new WaitForSeconds(0.01f);
-
                 _triangles[tris + 0] = vert + 0;
                 _triangles[tris + 1] = vert + _xSize + 1;
                 _triangles[tris + 2] = vert + 1;
