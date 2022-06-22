@@ -15,7 +15,7 @@ public class MeshGenerator : MonoBehaviour
     private Vector3[] _vertices;
     private int[] _triangles;
 
-    private void Awake()
+    private void Start()
     {
         _meshFilter = GetComponent<MeshFilter>();
 
@@ -30,7 +30,7 @@ public class MeshGenerator : MonoBehaviour
     {
         _vertices = new Vector3[(_xSize + 1) * (_zSize + 1)];
 
-        for (int i = 0, z = 0; z <= _xSize; z++)
+        for (int i = 0, z = 0; z <= _zSize; z++)
         {
             for (var x = 0; x <= _xSize; x++, i++)
             {
@@ -38,13 +38,22 @@ public class MeshGenerator : MonoBehaviour
             }
         }
 
-        _triangles = new int[6];
-        _triangles[0] = 0;
-        _triangles[1] = _xSize + 1;
-        _triangles[2] = 1;
-        _triangles[3] = 1;
-        _triangles[4] = _xSize + 1;
-        _triangles[5] = _xSize + 2;
+        _triangles = new int[_xSize * _zSize * 6];
+        
+        var vert = 0;
+        var tris = 0;
+        for (var x = 0; x < _xSize; x++)
+        {
+            _triangles[tris + 0] = vert + 0;
+            _triangles[tris + 1] = vert + _xSize + 1;
+            _triangles[tris + 2] = vert + 1;
+            _triangles[tris + 3] = vert + 1;
+            _triangles[tris + 4] = vert + _xSize + 1;
+            _triangles[tris + 5] = vert + _xSize + 2;
+
+            vert++;
+            tris += 6;
+        }
     }
 
     private void UpdateMesh()
