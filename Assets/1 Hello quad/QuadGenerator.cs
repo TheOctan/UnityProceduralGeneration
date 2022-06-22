@@ -4,7 +4,6 @@ using UnityEngine;
 public class QuadGenerator : MonoBehaviour
 {
     private MeshFilter _meshFilter;
-
     private Mesh _mesh;
 
     private Vector3[] _vertices;
