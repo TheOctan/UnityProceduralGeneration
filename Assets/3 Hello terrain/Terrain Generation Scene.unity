@@ -236,7 +236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _xSize: 20
-  _zSize: 20
+  _zSize: 1
 --- !u!1001 &255380484
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -307,31 +307,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6256124512305793107, guid: bdcc1982869aeda4b9d085a67c9bf286, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.39156133
+      value: 9.64
       objectReference: {fileID: 0}
     - target: {fileID: 6256124512305793107, guid: bdcc1982869aeda4b9d085a67c9bf286, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.1749921
+      value: 6.6080093
       objectReference: {fileID: 0}
     - target: {fileID: 6256124512305793107, guid: bdcc1982869aeda4b9d085a67c9bf286, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.035716
+      value: -6.1570435
       objectReference: {fileID: 0}
     - target: {fileID: 6256124512305793107, guid: bdcc1982869aeda4b9d085a67c9bf286, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.9657882
+      value: -0.9177169
       objectReference: {fileID: 0}
     - target: {fileID: 6256124512305793107, guid: bdcc1982869aeda4b9d085a67c9bf286, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.25827432
+      value: -0.39702553
       objectReference: {fileID: 0}
     - target: {fileID: 6256124512305793107, guid: bdcc1982869aeda4b9d085a67c9bf286, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.022606336
+      value: -0.011841003
       objectReference: {fileID: 0}
     - target: {fileID: 6256124512305793107, guid: bdcc1982869aeda4b9d085a67c9bf286, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0060453797
+      value: 0.0051227836
       objectReference: {fileID: 0}
     - target: {fileID: 6256124512305793107, guid: bdcc1982869aeda4b9d085a67c9bf286, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -348,6 +348,10 @@ PrefabInstance:
     - target: {fileID: 6256124512305793110, guid: bdcc1982869aeda4b9d085a67c9bf286, type: 3}
       propertyPath: m_Name
       value: Main Camera
+      objectReference: {fileID: 0}
+    - target: {fileID: 8585150956801861159, guid: bdcc1982869aeda4b9d085a67c9bf286, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bdcc1982869aeda4b9d085a67c9bf286, type: 3}
