@@ -19,7 +19,6 @@ public class MeshGenerator : MonoBehaviour
     private void Start()
     {
         _meshFilter = GetComponent<MeshFilter>();
-
         _mesh = new Mesh();
         _meshFilter.mesh = _mesh;
 
@@ -84,18 +83,5 @@ public class MeshGenerator : MonoBehaviour
         _mesh.triangles = _triangles;
 
         _mesh.RecalculateNormals();
-    }
-
-    private void OnDrawGizmos()
-    {
-        if (_vertices == null)
-        {
-            return;
-        }
-
-        foreach (Vector3 point in _vertices)
-        {
-            Gizmos.DrawSphere(transform.TransformPoint(point), 0.1f);
-        }
     }
 }
