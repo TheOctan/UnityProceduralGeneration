@@ -39,11 +39,9 @@ public class MeshGenerator : MonoBehaviour
 
         _triangles = new int[_xSize * _zSize * 6];
 
-        var vert = 0;
-        var tris = 0;
-        for (var z = 0; z < _zSize; z++)
+        for (int vert = 0, tris = 0, z = 0; z < _zSize; z++, vert++)
         {
-            for (var x = 0; x < _xSize; x++)
+            for (var x = 0; x < _xSize; x++, vert++)
             {
                 _triangles[tris + 0] = vert + 0;
                 _triangles[tris + 1] = vert + _xSize + 1;
@@ -52,11 +50,8 @@ public class MeshGenerator : MonoBehaviour
                 _triangles[tris + 4] = vert + _xSize + 1;
                 _triangles[tris + 5] = vert + _xSize + 2;
 
-                vert++;
                 tris += 6;
             }
-
-            vert++;
         }
     }
 
