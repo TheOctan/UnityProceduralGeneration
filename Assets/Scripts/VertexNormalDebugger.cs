@@ -62,9 +62,10 @@ public class VertexNormalDebugger : MonoBehaviour
     private void DrawVertices(Mesh mesh)
     {
         Gizmos.color = _vertexColor;
+        float scale = transform.lossyScale.magnitude;
         foreach (Vector3 vertex in mesh.vertices)
         {
-            Gizmos.DrawSphere(transform.TransformPoint(vertex), _vertexRadius);
+            Gizmos.DrawSphere(transform.TransformPoint(vertex), _vertexRadius * scale);
         }
     }
 
