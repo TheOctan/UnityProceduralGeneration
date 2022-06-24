@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
@@ -33,11 +32,12 @@ public class MeshGenerator : MonoBehaviour
 
     private void GenerateMesh()
     {
+        _mesh.Clear();
+
         _vertices = new Vector3[(_xSize + 1) * (_zSize + 1)];
+        _triangles = new int[_xSize * _zSize * 6];
 
         UpdateVertices();
-
-        _triangles = new int[_xSize * _zSize * 6];
 
         for (int vert = 0, tris = 0, z = 0; z < _zSize; z++, vert++)
         {
@@ -53,6 +53,9 @@ public class MeshGenerator : MonoBehaviour
                 tris += 6;
             }
         }
+
+        _mesh.vertices = _vertices;
+        _mesh.triangles = _triangles;
     }
 
     private void UpdateVertices()
@@ -72,11 +75,7 @@ public class MeshGenerator : MonoBehaviour
 
     private void UpdateMesh()
     {
-        _mesh.Clear();
-
         _mesh.vertices = _vertices;
-        _mesh.triangles = _triangles;
-
         _mesh.RecalculateNormals();
     }
 }
