@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -24,62 +25,61 @@ public class VertexNormalDebugger : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        if (!_drawWithSelected)
+        if (!_drawWithSelected || !IsComponentsReady())
         {
             return;
         }
 
-        DrawNormals();
+        Mesh mesh = _meshFilter.sharedMesh;
+        if (mesh.vertices != null && mesh.normals != null)
+        {
+            DrawVertices(mesh);
+            DrawNormals(mesh);
+        }
     }
 
     private void OnDrawGizmos()
     {
-        if (_drawWithSelected)
+        if (_drawWithSelected || !IsComponentsReady())
         {
             return;
         }
 
-        DrawNormals();
-    }
-
-    private void DrawNormals()
-    {
-        if (IsComponentsReady())
+        Mesh mesh = _meshFilter.sharedMesh;
+        if (mesh.vertices != null && mesh.normals != null)
         {
-            return;
-        }
-
-        Mesh mesh = _meshFilter.mesh;
-
-        if (IsVerticesReady(mesh))
-        {
-            return;
-        }
-
-        for (var i = 0; i < mesh.vertices.Length; i++)
-        {
-            Vector3 vertex = mesh.vertices[i];
-            Vector3 normal = mesh.normals[i];
-
-            Gizmos.color = _vertexColor;
-            Gizmos.DrawSphere(transform.TransformPoint(vertex), _vertexRadius);
-
-            Vector3 startPosition = transform.TransformPoint(vertex);
-            Vector3 endPosition = startPosition + transform.TransformDirection(normal) * _lenght;
-
-            Gizmos.color = _normalColor;
-            Gizmos.DrawLine(startPosition, endPosition);
+            DrawVertices(mesh);
+            DrawNormals(mesh);
         }
     }
 
     private bool IsComponentsReady()
     {
-        return _meshFilter == null ||
-               _meshFilter.mesh == null;
+        return _meshFilter != null &&
+               _meshFilter.sharedMesh != null;
     }
 
-    private static bool IsVerticesReady(Mesh mesh)
+    private void DrawVertices(Mesh mesh)
     {
-        return mesh.vertices == null || mesh.normals == null;
+        Gizmos.color = _vertexColor;
+        foreach (Vector3 vertex in mesh.vertices)
+        {
+            Gizmos.DrawSphere(transform.TransformPoint(vertex), _vertexRadius);
+        }
+    }
+
+    private void DrawNormals(Mesh mesh)
+    {
+        Gizmos.color = _normalColor;
+        for (var i = 0; i < mesh.normals.Length; i++)
+        {
+            Vector3 normal = mesh.normals[i];
+            Vector3 vertex = mesh.vertices[i];
+
+            Vector3 startPosition = transform.TransformPoint(vertex);
+            Vector3 endPosition = startPosition + transform.TransformDirection(normal) * _lenght;
+
+            Gizmos.DrawLine(startPosition, endPosition);
+        }
     }
 }
