@@ -1,3 +1,5 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -9,7 +11,7 @@ public class ColoredMeshGenerator : MonoBehaviour
 
     [Header("Noise")]
     [SerializeField] private float _scale = 5;
-    [SerializeField] private float _height = 5;
+    [SerializeField] private float _amplitude = 5;
     [SerializeField] private float _xOffset;
     [SerializeField] private float _zOffset;
     
@@ -102,7 +104,7 @@ public class ColoredMeshGenerator : MonoBehaviour
 
     private float GetNoiseSample(int x, int z)
     {
-        return Mathf.PerlinNoise(x * ResolutionX * _scale + _xOffset, z * ResolutionZ * _scale + _zOffset) * _height;
+        return Mathf.PerlinNoise(x * ResolutionX * _scale + _xOffset, z * ResolutionZ * _scale + _zOffset) * _amplitude;
     }
 
     private void UpdateMesh()
