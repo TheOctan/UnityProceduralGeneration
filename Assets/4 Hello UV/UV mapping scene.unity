@@ -158,6 +158,11 @@ MonoBehaviour:
   _zSize: 20
   _scale: 5
   _height: 5
+  _xOffset: 0
+  _zOffset: 0
+  _isAnimate: 1
+  _xOffsetSpeed: 1
+  _zOffsetSpeed: 1
 --- !u!23 &1181378689
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class ColoredMeshGenerator : MonoBehaviour
@@ -6,8 +7,16 @@ public class ColoredMeshGenerator : MonoBehaviour
     [SerializeField] private int _xSize = 20;
     [SerializeField] private int _zSize = 20;
 
+    [Header("Noise")]
     [SerializeField] private float _scale = 5;
     [SerializeField] private float _height = 5;
+    [SerializeField] private float _xOffset;
+    [SerializeField] private float _zOffset;
+    
+    [Header("Animation")]
+    [SerializeField] private bool _isAnimate;
+    [SerializeField] private float _xOffsetSpeed = 1f;
+    [SerializeField] private float _zOffsetSpeed = 1f;
 
     private MeshFilter _meshFilter;
     private Mesh _mesh;
@@ -33,6 +42,12 @@ public class ColoredMeshGenerator : MonoBehaviour
     {
         UpdateVertices();
         UpdateMesh();
+
+        if (_isAnimate)
+        {
+            _xOffset += Time.deltaTime * _xOffsetSpeed;
+            _zOffset += Time.deltaTime * _zOffsetSpeed;
+        }
     }
 
     private void GenerateMesh()
@@ -87,7 +102,7 @@ public class ColoredMeshGenerator : MonoBehaviour
 
     private float GetNoiseSample(int x, int z)
     {
-        return Mathf.PerlinNoise(x * ResolutionX * _scale, z * ResolutionZ * _scale) * _height;
+        return Mathf.PerlinNoise(x * ResolutionX * _scale + _xOffset, z * ResolutionZ * _scale + _zOffset) * _height;
     }
 
     private void UpdateMesh()
