@@ -1,7 +1,4 @@
-using System;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class ColoredMeshGenerator : MonoBehaviour
@@ -30,8 +27,8 @@ public class ColoredMeshGenerator : MonoBehaviour
     private Color[] _colors;
     private int[] _triangles;
 
-    private float _minTerrainHeight = float.MaxValue;
-    private float _maxTerrainHeight = float.MinValue;
+    private float _minTerrainHeight;
+    private float _maxTerrainHeight;
 
     private int VertexCount => (_xSize + 1) * (_zSize + 1);
     private float ResolutionX => 1f / _xSize;
@@ -77,6 +74,9 @@ public class ColoredMeshGenerator : MonoBehaviour
 
     private void UpdateVertices()
     {
+        _minTerrainHeight = float.MaxValue;
+        _maxTerrainHeight = float.MinValue;
+
         for (int i = 0, z = 0; z <= _zSize; z++)
         {
             for (var x = 0; x <= _xSize; x++, i++)
