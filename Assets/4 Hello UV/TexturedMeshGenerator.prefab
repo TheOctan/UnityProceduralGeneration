@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3442655400789828059}
   - component: {fileID: 9216435104385949110}
   m_Layer: 0
-  m_Name: ColoredMeshGenerator
+  m_Name: TexturedMeshGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

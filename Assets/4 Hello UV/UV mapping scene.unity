@@ -246,7 +246,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3442655400789827876, guid: e7b8cd9f29e75ae458776ecee8e05d7a, type: 3}
       propertyPath: m_Name
-      value: ColoredMeshGenerator
+      value: TexturedMeshGenerator
       objectReference: {fileID: 0}
     - target: {fileID: 3442655400789828056, guid: e7b8cd9f29e75ae458776ecee8e05d7a, type: 3}
       propertyPath: m_RootOrder
