@@ -17,10 +17,10 @@ namespace Octan.TerrainGeneration.Scripts
             {
                 for (var x = 0; x < width; x++)
                 {
-                    var sampleX = x / scale;
-                    var sampleY = y / scale;
+                    float sampleX = x / scale;
+                    float sampleY = y / scale;
 
-                    var perlinValue = Mathf.PerlinNoise(sampleX, sampleY);
+                    float perlinValue = Mathf.PerlinNoise(sampleX, sampleY);
                     noiseMap[x, y] = perlinValue;
                 }
             }
