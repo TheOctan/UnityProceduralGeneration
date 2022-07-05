@@ -4,7 +4,10 @@ namespace OctanGames.TerrainGeneration.Scripts
 {
     public static class MeshGenerator
     {
-        public static MeshData GenerateTerrainMesh(float[,] heightMap)
+        public static MeshData GenerateTerrainMesh(
+            float[,] heightMap,
+            float heightMultiplier,
+            AnimationCurve heightCurve)
         {
             int width = heightMap.GetLength(0);
             int height = heightMap.GetLength(1);
@@ -18,7 +21,9 @@ namespace OctanGames.TerrainGeneration.Scripts
             {
                 for (var x = 0; x < width; x++)
                 {
-                    meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, heightMap[x, y], topLeftZ - y);
+                    meshData.vertices[vertexIndex] =
+                        new Vector3(topLeftX + x, heightCurve.Evaluate(heightMap[x, y]) * heightMultiplier,
+                            topLeftZ - y);
                     meshData.uvs[vertexIndex] = new Vector2((float)x / width, (float)y / height);
 
                     if (x < width - 1 && y < height - 1)
@@ -32,6 +37,7 @@ namespace OctanGames.TerrainGeneration.Scripts
                             vertexIndex,
                             vertexIndex + 1);
                     }
+
                     vertexIndex++;
                 }
             }

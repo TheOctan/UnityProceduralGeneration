@@ -6,10 +6,11 @@ namespace OctanGames.TerrainGeneration.Scripts
     {
         public static Texture2D TextureFromColorMap(Color[] colorMap, int width, int height)
         {
-            var texture = new Texture2D(width, height);
-
-            texture.filterMode = FilterMode.Point;
-            texture.wrapMode = TextureWrapMode.Clamp;
+            var texture = new Texture2D(width, height)
+            {
+                filterMode = FilterMode.Point,
+                wrapMode = TextureWrapMode.Clamp
+            };
 
             texture.SetPixels(colorMap);
             texture.Apply();

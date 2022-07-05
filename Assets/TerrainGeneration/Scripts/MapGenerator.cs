@@ -15,17 +15,23 @@ namespace OctanGames.TerrainGeneration.Scripts
         }
 
         [SerializeField] private DrawMode _drawMode;
+
         [Space]
         [SerializeField, Min(1)] private int _width = 100;
         [SerializeField, Min(1)] private int _height = 100;
         [SerializeField] private float _noiseScale = 25f;
+
         [Space]
         [SerializeField, Min(0)] private int _octaves = 5;
         [SerializeField, Range(0, 1)] private float _persistance = 0.5f;
         [SerializeField, Min(1)] private float _lacunarity = 2f;
+        [SerializeField, Min(1)] private float _meshHeight = 15;
+        [SerializeField] private AnimationCurve _meshHeightCurve;
+
         [Space]
         [SerializeField] private int _seed;
         [SerializeField] private Vector2 _offset;
+ 
         [Space]
         [SerializeField] private TerrainPreset _terrainPreset;
         [Space]
@@ -79,7 +85,7 @@ namespace OctanGames.TerrainGeneration.Scripts
                 }
                 case DrawMode.Mesh:
                 {
-                    MeshData mesh = MeshGenerator.GenerateTerrainMesh(noiseMap);
+                    MeshData mesh = MeshGenerator.GenerateTerrainMesh(noiseMap, _meshHeight, _meshHeightCurve);
                     Texture2D texture = TextureGenerator.TextureFromColorMap(colorMap, _width, _height);
                     _renderer.DrawMesh(mesh, texture);
                     break;
