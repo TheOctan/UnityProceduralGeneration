@@ -10,7 +10,8 @@ namespace OctanGames.TerrainGeneration.Scripts
         private enum DrawMode
         {
             NoiseMap,
-            ColorMap
+            ColorMap,
+            Mesh
         }
 
         [SerializeField] private DrawMode _drawMode;
@@ -65,14 +66,29 @@ namespace OctanGames.TerrainGeneration.Scripts
             switch (_drawMode)
             {
                 case DrawMode.NoiseMap:
-                    _renderer.DrawTexture(TextureGenerator.TextureFromHeightMap(noiseMap));
+                {
+                    Texture2D texture = TextureGenerator.TextureFromHeightMap(noiseMap);
+                    _renderer.DrawTexture(texture);
                     break;
+                }
                 case DrawMode.ColorMap:
-                    _renderer.DrawTexture(TextureGenerator.TextureFromColorMap(colorMap, _width, _height));
+                {
+                    Texture2D texture = TextureGenerator.TextureFromColorMap(colorMap, _width, _height);
+                    _renderer.DrawTexture(texture);
                     break;
+                }
+                case DrawMode.Mesh:
+                {
+                    MeshData mesh = MeshGenerator.GenerateTerrainMesh(noiseMap);
+                    Texture2D texture = TextureGenerator.TextureFromColorMap(colorMap, _width, _height);
+                    _renderer.DrawMesh(mesh, texture);
+                    break;
+                }
                 default:
+                {
                     Debug.LogError("Undefined type of draw mode");
                     break;
+                }
             }
         }
 

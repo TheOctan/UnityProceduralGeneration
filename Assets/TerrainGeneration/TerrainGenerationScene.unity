@@ -253,12 +253,12 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1297328887605058648, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
-      propertyPath: _offset.x
-      value: 0
+      propertyPath: _lacunarity
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1297328887605058648, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
-      propertyPath: _offset.y
-      value: 0
+      propertyPath: _persistance
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1297328887605058648, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
       propertyPath: _terrainPreset
