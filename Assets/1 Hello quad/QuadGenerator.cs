@@ -1,49 +1,52 @@
 using UnityEngine;
 
-[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
-public class QuadGenerator : MonoBehaviour
+namespace OctanGames._1_Hello_quad
 {
-    private MeshFilter _meshFilter;
-    private Mesh _mesh;
-
-    private Vector3[] _vertices;
-    private int[] _triangles;
-
-    private void Awake()
+    [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
+    public class QuadGenerator : MonoBehaviour
     {
-        _meshFilter = GetComponent<MeshFilter>();
+        private MeshFilter _meshFilter;
+        private Mesh _mesh;
 
-        _mesh = new Mesh();
-        _meshFilter.mesh = _mesh;
+        private Vector3[] _vertices;
+        private int[] _triangles;
 
-        CreateMesh();
-        UpdateMesh();
-    }
-
-    private void CreateMesh()
-    {
-        _vertices = new[]
+        private void Awake()
         {
-            new Vector3(0, 0, 0),
-            new Vector3(0, 0, 1),
-            new Vector3(1, 0, 0),
-            new Vector3(1, 0, 1)
-        };
+            _meshFilter = GetComponent<MeshFilter>();
 
-        _triangles = new[]
+            _mesh = new Mesh();
+            _meshFilter.mesh = _mesh;
+
+            CreateMesh();
+            UpdateMesh();
+        }
+
+        private void CreateMesh()
         {
-            0, 1, 2,
-            1, 3, 2
-        };
-    }
+            _vertices = new[]
+            {
+                new Vector3(0, 0, 0),
+                new Vector3(0, 0, 1),
+                new Vector3(1, 0, 0),
+                new Vector3(1, 0, 1)
+            };
 
-    private void UpdateMesh()
-    {
-        _mesh.Clear();
+            _triangles = new[]
+            {
+                0, 1, 2,
+                1, 3, 2
+            };
+        }
 
-        _mesh.vertices = _vertices;
-        _mesh.triangles = _triangles;
+        private void UpdateMesh()
+        {
+            _mesh.Clear();
 
-        _mesh.RecalculateNormals();
+            _mesh.vertices = _vertices;
+            _mesh.triangles = _triangles;
+
+            _mesh.RecalculateNormals();
+        }
     }
 }
