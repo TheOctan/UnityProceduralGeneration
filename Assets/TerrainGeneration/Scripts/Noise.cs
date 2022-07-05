@@ -1,17 +1,31 @@
 using UnityEngine;
+using Random = System.Random;
 
 namespace OctanGames.TerrainGeneration.Scripts
 {
     public static class Noise
     {
+        private const int OFFSET_RANGE = 100000;
+
         public static float[,] GenerateNoiseMap(
             int width, int height,
+            int seed,
             float scale,
             int octaves,
             float persistance,
-            float lacunarity)
+            float lacunarity,
+            Vector2 offset)
         {
             var noiseMap = new float[width, height];
+
+            var random = new Random(seed);
+            var octavesOffsets = new Vector2[octaves];
+            for (var i = 0; i < octaves; i++)
+            {
+                float offsetX = random.Next(-OFFSET_RANGE, OFFSET_RANGE) + offset.x;
+                float offsetY = random.Next(-OFFSET_RANGE, OFFSET_RANGE) + offset.y;
+                octavesOffsets[i] = new Vector2(offsetX, offsetY);
+            }
 
             if (scale <= 0)
             {
@@ -31,8 +45,8 @@ namespace OctanGames.TerrainGeneration.Scripts
 
                     for (var i = 0; i < octaves; i++)
                     {
-                        float sampleX = x / scale * frequency;
-                        float sampleY = y / scale * frequency;
+                        float sampleX = x / scale * frequency + octavesOffsets[i].x;
+                        float sampleY = y / scale * frequency + octavesOffsets[i].y;
 
                         float perlinValue = LinearConverter.ColorToCoordinate(Mathf.PerlinNoise(sampleX, sampleY));
                         noiseHeight += perlinValue * amplitude;

@@ -252,25 +252,9 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: 100
       objectReference: {fileID: 0}
-    - target: {fileID: 1892506551, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 100
-      objectReference: {fileID: 0}
     - target: {fileID: 1297328887605058648, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
       propertyPath: _width
       value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 1297328887605058648, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
-      propertyPath: _height
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 1297328887605058648, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
-      propertyPath: _noiseScale
-      value: 27.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 1297328887605058648, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
-      propertyPath: _autoGenerate
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7540831049967168515, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
       propertyPath: m_RootOrder
