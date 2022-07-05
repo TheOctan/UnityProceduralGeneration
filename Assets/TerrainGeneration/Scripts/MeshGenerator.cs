@@ -7,19 +7,23 @@ namespace OctanGames.TerrainGeneration.Scripts
         public static MeshData GenerateTerrainMesh(
             float[,] heightMap,
             float heightMultiplier,
-            AnimationCurve heightCurve)
+            AnimationCurve heightCurve,
+            int levelOfDetail)
         {
             int width = heightMap.GetLength(0);
             int height = heightMap.GetLength(1);
             float topLeftX = (width - 1) * -0.5f;
             float topLeftZ = (height - 1) * 0.5f;
 
-            var meshData = new MeshData(width, height);
+            int meshSimplificationIncrement = (levelOfDetail == 0) ? 1 : levelOfDetail * 2;
+            int vertexPerLine = (width - 1) / meshSimplificationIncrement + 1;
+
+            var meshData = new MeshData(vertexPerLine, vertexPerLine);
 
             var vertexIndex = 0;
-            for (var y = 0; y < height; y++)
+            for (var y = 0; y < height; y += meshSimplificationIncrement)
             {
-                for (var x = 0; x < width; x++)
+                for (var x = 0; x < width; x += meshSimplificationIncrement)
                 {
                     meshData.vertices[vertexIndex] =
                         new Vector3(topLeftX + x, heightCurve.Evaluate(heightMap[x, y]) * heightMultiplier,
@@ -30,10 +34,10 @@ namespace OctanGames.TerrainGeneration.Scripts
                     {
                         meshData.AddTriangle(
                             vertexIndex,
-                            vertexIndex + width + 1,
-                            vertexIndex + width);
+                            vertexIndex + vertexPerLine + 1,
+                            vertexIndex + vertexPerLine);
                         meshData.AddTriangle(
-                            vertexIndex + width + 1,
+                            vertexIndex + vertexPerLine + 1,
                             vertexIndex,
                             vertexIndex + 1);
                     }
