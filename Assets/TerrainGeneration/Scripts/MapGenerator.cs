@@ -31,9 +31,6 @@ namespace OctanGames.TerrainGeneration.Scripts
 
         [Space] [SerializeField] private TerrainPreset _terrainPreset;
 
-        [Space] [SerializeField, UsedImplicitly]
-        private bool _autoGenerate = true;
-
         private MapRenderer _renderer;
 
         public void GenerateMap()

@@ -7,21 +7,22 @@ namespace OctanGames.TerrainGeneration.Editor
     [CustomEditor(typeof(MapGenerator))]
     public class MapGeneratorEditor : UnityEditor.Editor
     {
-        private SerializedProperty _autoGenerate;
+        private bool _autoGenerate = true;
         private MapGenerator _mapGenerator;
 
         private void OnEnable()
         {
             _mapGenerator = target as MapGenerator;
-            _autoGenerate = serializedObject.FindProperty(nameof(_autoGenerate));
         }
 
         public override void OnInspectorGUI()
         {
-            if (DrawDefaultInspector() && _autoGenerate.boolValue)
+            if (DrawDefaultInspector() && _autoGenerate)
             {
                 _mapGenerator.GenerateMap();
             }
+
+            _autoGenerate = EditorGUILayout.Toggle("Auto Generate", _autoGenerate);
 
             if (GUILayout.Button("Generate"))
             {
