@@ -71,13 +71,7 @@ namespace OctanGames.TerrainGeneration.Scripts
                 }
             }
 
-            for (var y = 0; y < height; y++)
-            {
-                for (var x = 0; x < width; x++)
-                {
-                    noiseMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noiseMap[x, y]);
-                }
-            }
+            noiseMap.Normalize(minNoiseHeight, maxNoiseHeight);
 
             return noiseMap;
         }

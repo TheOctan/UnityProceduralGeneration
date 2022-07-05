@@ -35,5 +35,37 @@ namespace OctanGames
             // XYZ => -1..1
             return value * 2 - 1;
         }
+
+        public static void Normalize(this float[,] map, float minValue, float maxValue)
+        {
+            int width = map.GetLength(0);
+            int height = map.GetLength(1);
+            
+            for (var y = 0; y < height; y++)
+            {
+                for (var x = 0; x < width; x++)
+                {
+                    map[x, y] = Mathf.InverseLerp(minValue, maxValue, map[x, y]);
+                }
+            }
+        }
+
+        public static float[,] Normalized(this float[,] map, float minValue, float maxValue)
+        {
+            int width = map.GetLength(0);
+            int height = map.GetLength(1);
+
+            var newMap = new float[width, height];
+
+            for (var y = 0; y < height; y++)
+            {
+                for (var x = 0; x < width; x++)
+                {
+                    newMap[x, y] = Mathf.InverseLerp(minValue, maxValue, map[x, y]);
+                }
+            }
+
+            return newMap;
+        }
     }
 }
