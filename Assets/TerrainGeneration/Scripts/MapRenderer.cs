@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Octan.TerrainGeneration.Scripts
+namespace OctanGames.TerrainGeneration.Scripts
 {
     public class MapRenderer : MonoBehaviour
     {

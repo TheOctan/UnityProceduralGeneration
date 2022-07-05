@@ -1,9 +1,8 @@
-using System;
-using Octan.TerrainGeneration.Scripts;
+using OctanGames.TerrainGeneration.Scripts;
 using UnityEditor;
 using UnityEngine;
 
-namespace Octan.TerrainGeneration.Editor
+namespace OctanGames.TerrainGeneration.Editor
 {
     [CustomEditor(typeof(MapGenerator))]
     public class MapGeneratorEditor : UnityEditor.Editor
