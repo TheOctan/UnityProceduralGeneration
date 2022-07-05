@@ -35,6 +35,9 @@ namespace OctanGames.TerrainGeneration.Scripts
             var maxNoiseHeight = float.MinValue;
             var minNoiseHeight = float.MaxValue;
 
+            float halfWidth = width * 0.5f;
+            float halfHeight = height * 0.5f;
+
             for (var y = 0; y < height; y++)
             {
                 for (var x = 0; x < width; x++)
@@ -45,8 +48,8 @@ namespace OctanGames.TerrainGeneration.Scripts
 
                     for (var i = 0; i < octaves; i++)
                     {
-                        float sampleX = x / scale * frequency + octavesOffsets[i].x;
-                        float sampleY = y / scale * frequency + octavesOffsets[i].y;
+                        float sampleX = (x - halfWidth) / scale * frequency + octavesOffsets[i].x;
+                        float sampleY = (y - halfHeight) / scale * frequency + octavesOffsets[i].y;
 
                         float perlinValue = LinearConverter.ColorToCoordinate(Mathf.PerlinNoise(sampleX, sampleY));
                         noiseHeight += perlinValue * amplitude;
