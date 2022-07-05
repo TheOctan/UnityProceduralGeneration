@@ -13,7 +13,7 @@ namespace OctanGames.TerrainGeneration.Scripts
             Mesh
         }
 
-        private const int MAP_CHUNK_SIZE = 241;
+        public const int MAP_CHUNK_SIZE = 241;
 
         [SerializeField] private DrawMode _drawMode;
         [SerializeField, Range(0, 6)] private int _levelOfDetail;
