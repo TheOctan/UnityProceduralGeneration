@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 2391887406042173079}
   - component: {fileID: 1777901177562954393}
   - component: {fileID: 3096519864440308951}
+  - component: {fileID: 432425593}
   m_Layer: 0
   m_Name: Mesh
   m_TagString: Untagged
@@ -110,8 +111,8 @@ Transform:
   m_GameObject: {fileID: 5450200418173790168}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 7540831049967168515}
   m_RootOrder: 1
@@ -144,7 +145,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 48c0baa1ec5a14440b9e8858f2ac2301, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -166,6 +167,23 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &432425593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5450200418173790168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21b7226accb8b9b44a5fd484add4ca7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _drawWithSelected: 1
+  _vertexColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  _vertexRadius: 0.1
+  _normalColor: {r: 1, g: 0, b: 0, a: 1}
+  _lenght: 0.5
 --- !u!1 &7889880832633743232
 GameObject:
   m_ObjectHideFlags: 0
@@ -213,7 +231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf581db201675da4c8b171dc05281f6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _drawMode: 1
+  _drawMode: 2
   _width: 100
   _height: 100
   _noiseScale: 25
@@ -237,5 +255,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _renderer: {fileID: 1892506549}
-  _meshFilter: {fileID: 0}
-  _meshRenderer: {fileID: 0}
+  _meshFilter: {fileID: 1777901177562954393}
+  _meshRenderer: {fileID: 3096519864440308951}
