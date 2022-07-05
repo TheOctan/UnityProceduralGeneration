@@ -248,14 +248,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1892506551, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 100
+    - target: {fileID: 1297328887605058648, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
+      propertyPath: _drawMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1297328887605058648, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
-      propertyPath: _width
-      value: 100
+      propertyPath: _offset.x
+      value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1297328887605058648, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
+      propertyPath: _offset.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1297328887605058648, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
+      propertyPath: _terrainPreset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6566769b26f425a48a88d2f601fa8464, type: 2}
     - target: {fileID: 7540831049967168515, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
       propertyPath: m_RootOrder
       value: 2
