@@ -248,13 +248,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1892506551, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 100
+    - target: {fileID: 1297328887605058648, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
+      propertyPath: _regions.Array.data[0].name
+      value: WaterDeep
       objectReference: {fileID: 0}
     - target: {fileID: 1297328887605058648, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
-      propertyPath: _width
-      value: 100
+      propertyPath: _regions.Array.data[1].name
+      value: WaterShallow
+      objectReference: {fileID: 0}
+    - target: {fileID: 1297328887605058648, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
+      propertyPath: _regions.Array.data[2].name
+      value: Sand
       objectReference: {fileID: 0}
     - target: {fileID: 7540831049967168515, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
       propertyPath: m_RootOrder

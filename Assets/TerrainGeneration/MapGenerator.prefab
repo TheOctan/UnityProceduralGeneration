@@ -129,12 +129,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf581db201675da4c8b171dc05281f6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _drawMode: 1
   _width: 100
   _height: 100
-  _noiseScale: 27.6
-  _octaves: 4
+  _noiseScale: 25
+  _octaves: 5
   _persistance: 0.5
   _lacunarity: 2
+  _seed: 0
+  _offset: {x: 0, y: 0}
+  _terrainPreset: {fileID: 11400000, guid: 6566769b26f425a48a88d2f601fa8464, type: 2}
   _autoGenerate: 1
 --- !u!114 &7882965324970523009
 MonoBehaviour:
