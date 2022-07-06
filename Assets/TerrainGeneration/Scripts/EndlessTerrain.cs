@@ -8,6 +8,11 @@ namespace OctanGames.TerrainGeneration.Scripts
     [RequireComponent(typeof(MapGenerator))]
     public class EndlessTerrain : MonoBehaviour
     {
+        private const float VIEWER_MOVE_THRESHOLD_FOR_CHUNK_UPDATE = 25f;
+
+        private const float SQR_VIEWER_MOVE_THRESHOLD_FOR_CHUNK_UPDATE =
+            VIEWER_MOVE_THRESHOLD_FOR_CHUNK_UPDATE * VIEWER_MOVE_THRESHOLD_FOR_CHUNK_UPDATE;
+
         [SerializeField] private LODInfo[] _detailLevles;
         [SerializeField] private Material _material;
         [SerializeField] private Transform _viewer;
@@ -15,22 +20,30 @@ namespace OctanGames.TerrainGeneration.Scripts
         private readonly Dictionary<Vector2, TerrainChunk> _terrainChunks = new();
         private readonly List<TerrainChunk> _lastUpdatedChunks = new();
         private MapGenerator _mapGenerator;
-        private float _maxViewDistance;
+        private Vector2 _lastViewerPosition;
 
-        private Vector2 ViewerPosition => new(_viewer.position.x, _viewer.position.z);
+        public static float MaxViewDistance { get; private set; }
+        public static Vector2 ViewerPosition { get; private set; }
         private static int ChunkSize => MapGenerator.MAP_CHUNK_SIZE - 1;
         private int CountForwardVisibleChunks { get; set; }
 
         private void Start()
         {
             _mapGenerator = GetComponent<MapGenerator>();
-            _maxViewDistance = _detailLevles[^1].visibleDistanceThreshold;
-            CountForwardVisibleChunks = Mathf.RoundToInt(_maxViewDistance / ChunkSize);
+            MaxViewDistance = _detailLevles[^1].visibleDistanceThreshold;
+            CountForwardVisibleChunks = Mathf.RoundToInt(MaxViewDistance / ChunkSize);
+            UpdateVisibleChunks();
         }
 
         private void Update()
         {
-            UpdateVisibleChunks();
+            ViewerPosition = new Vector2(_viewer.position.x, _viewer.position.z);
+            if ((_lastViewerPosition - ViewerPosition).sqrMagnitude >= SQR_VIEWER_MOVE_THRESHOLD_FOR_CHUNK_UPDATE)
+            {
+                _lastViewerPosition = ViewerPosition;
+                UpdateVisibleChunks();
+                print("Update");
+            }
         }
 
         private void UpdateVisibleChunks()
@@ -50,7 +63,7 @@ namespace OctanGames.TerrainGeneration.Scripts
                     if (_terrainChunks.ContainsKey(viewedChunkCoord))
                     {
                         TerrainChunk chunk = _terrainChunks[viewedChunkCoord];
-                        chunk.Update(ViewerPosition, _maxViewDistance);
+                        chunk.Update();
 
                         if (chunk.IsVisible)
                         {
@@ -60,13 +73,15 @@ namespace OctanGames.TerrainGeneration.Scripts
                     else
                     {
                         _terrainChunks.Add(viewedChunkCoord,
-                            new TerrainChunk(viewedChunkCoord, ChunkSize, _detailLevles, transform, _material, _mapGenerator));
+                            new TerrainChunk(viewedChunkCoord,
+                                ChunkSize, _detailLevles, transform, _material,
+                                _mapGenerator, ViewerPosition, MaxViewDistance));
                     }
                 }
             }
         }
 
-        private class TerrainChunk
+        public class TerrainChunk
         {
             private readonly GameObject _meshObject;
             private readonly MapGenerator _mapGenerator;
@@ -81,11 +96,15 @@ namespace OctanGames.TerrainGeneration.Scripts
             private int _prevLODIndex = -1;
             private bool _mapDataReceived;
 
+            private Vector2 _viewerPosition;
+            private float _maxViewDistance;
+
             public bool IsVisible => _meshObject.activeSelf;
 
-            public TerrainChunk(Vector2 coord, int size, 
-                LODInfo[] detailLevels, Transform parent, 
-                Material material, MapGenerator mapGenerator)
+            public TerrainChunk(Vector2 coord, int size,
+                LODInfo[] detailLevels, Transform parent,
+                Material material, MapGenerator mapGenerator,
+                Vector2 viewerPosition, float maxViewDistance)
             {
                 Vector2 position = coord * size;
                 var position3D = new Vector3(position.x, 0, position.y);
@@ -100,26 +119,30 @@ namespace OctanGames.TerrainGeneration.Scripts
                 _meshObject.transform.SetParent(parent);
                 SetVisible(false);
 
+                _viewerPosition = viewerPosition;
+                _maxViewDistance = maxViewDistance;
+
                 _lodMeshes = new LODMesh[_detailLevels.Length];
                 for (var i = 0; i < _detailLevels.Length; i++)
                 {
                     int lod = _detailLevels[i].lod;
-                    _lodMeshes[i] = new LODMesh(lod);
+                    _lodMeshes[i] = new LODMesh(lod, Update);
                 }
 
                 _mapGenerator = mapGenerator;
                 _mapGenerator.RequestMapData(OnMapDataReceived);
             }
 
-            public void Update(Vector2 viewerPosition, float maxViewDistance)
+            public void Update()
             {
                 if (!_mapDataReceived)
                 {
                     return;
                 }
 
-                float viewerSqrDistanceFromNearestEdge = _bounds.SqrDistance(viewerPosition);
-                bool visible = viewerSqrDistanceFromNearestEdge <= maxViewDistance * maxViewDistance;
+                float viewerSqrDistanceFromNearestEdge = _bounds.SqrDistance(EndlessTerrain.ViewerPosition);
+                bool visible = viewerSqrDistanceFromNearestEdge <=
+                               EndlessTerrain.MaxViewDistance * EndlessTerrain.MaxViewDistance;
 
                 if (visible)
                 {
@@ -165,19 +188,23 @@ namespace OctanGames.TerrainGeneration.Scripts
             {
                 _mapData = mapData;
                 _mapDataReceived = true;
+
+                Update();
             }
         }
 
-        private class LODMesh
+        public class LODMesh
         {
             public Mesh Mesh { get; private set; }
             public bool HasRequestedMesh { get; private set; }
             public bool HasMesh { get; private set; }
 
+            private Action _updateCallback;
             private readonly int _lod;
 
-            public LODMesh(int lod)
+            public LODMesh(int lod, Action updateCallback)
             {
+                _updateCallback = updateCallback;
                 _lod = lod;
             }
 
@@ -191,11 +218,13 @@ namespace OctanGames.TerrainGeneration.Scripts
             {
                 Mesh = meshData.CreateMesh();
                 HasMesh = true;
+
+                _updateCallback?.Invoke();
             }
         }
 
         [Serializable]
-        private struct LODInfo
+        public struct LODInfo
         {
             public int lod;
             public float visibleDistanceThreshold;

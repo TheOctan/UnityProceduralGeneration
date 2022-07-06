@@ -385,32 +385,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 124124669}
     - target: {fileID: 1192671450566215402, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
-      propertyPath: _detailLevles.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1192671450566215402, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
-      propertyPath: _detailLevles.Array.data[0].lod
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1192671450566215402, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
       propertyPath: _detailLevles.Array.data[1].lod
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1192671450566215402, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
       propertyPath: _detailLevles.Array.data[2].lod
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1192671450566215402, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
-      propertyPath: _detailLevles.Array.data[0].visibleDistanceThreshold
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 1192671450566215402, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
-      propertyPath: _detailLevles.Array.data[1].visibleDistanceThreshold
-      value: 400
-      objectReference: {fileID: 0}
-    - target: {fileID: 1192671450566215402, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
-      propertyPath: _detailLevles.Array.data[2].visibleDistanceThreshold
-      value: 600
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7540831049967168515, guid: 12bc65227ef3bb64ea2f9bcc49fc5c2a, type: 3}
       propertyPath: m_RootOrder
