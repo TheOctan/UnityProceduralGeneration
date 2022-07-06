@@ -1,13 +1,17 @@
 using System.Collections.Generic;
+using OctanGames.TerrainGeneration.Scripts.Data;
 using UnityEngine;
 
 namespace OctanGames.TerrainGeneration.Scripts
 {
+    [RequireComponent(typeof(MapGenerator))]
     public class EndlessTerrain : MonoBehaviour
     {
         private const float MAX_VIEW_DISTANCE = 450;
 
+        [SerializeField] private Material _material;
         [SerializeField] private Transform _viewer;
+        private MapGenerator _mapGenerator;
         private readonly Dictionary<Vector2, TerrainChunk> _terrainChunks = new();
         private readonly List<TerrainChunk> _lastUpdatedChunks = new();
 
@@ -17,6 +21,7 @@ namespace OctanGames.TerrainGeneration.Scripts
 
         private void Start()
         {
+            _mapGenerator = GetComponent<MapGenerator>();
             CountForwardVisibleChunks = Mathf.RoundToInt(MAX_VIEW_DISTANCE / ChunkSize);
         }
 
@@ -53,7 +58,8 @@ namespace OctanGames.TerrainGeneration.Scripts
                     }
                     else
                     {
-                        _terrainChunks.Add(viewedChunkCoord, new TerrainChunk(viewedChunkCoord, ChunkSize, transform));
+                        _terrainChunks.Add(viewedChunkCoord,
+                            new TerrainChunk(viewedChunkCoord, ChunkSize, transform, _material, _mapGenerator));
                     }
                 }
             }
@@ -62,21 +68,30 @@ namespace OctanGames.TerrainGeneration.Scripts
         private class TerrainChunk
         {
             private readonly GameObject _meshObject;
-            private readonly Vector2 _position;
+            private readonly MapGenerator _mapGenerator;
+            private readonly MeshFilter _meshFilter;
+            private readonly MeshRenderer _meshRenderer;
             private Bounds _bounds;
+            private MapData _mapData;
+
             public bool IsVisible => _meshObject.activeSelf;
 
-            public TerrainChunk(Vector2 coord, int size, Transform parent)
+            public TerrainChunk(Vector2 coord, int size, Transform parent, Material material, MapGenerator mapGenerator)
             {
-                _position = coord * size;
-                var position3D = new Vector3(_position.x, 0, _position.y);
-                _bounds = new Bounds(_position, Vector2.one * size);
+                Vector2 position = coord * size;
+                var position3D = new Vector3(position.x, 0, position.y);
+                _bounds = new Bounds(position, Vector2.one * size);
 
-                _meshObject = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                _meshObject = new GameObject($"Chunk {Vector2Int.RoundToInt(coord)}");
+                _meshFilter = _meshObject.AddComponent<MeshFilter>();
+                _meshRenderer = _meshObject.AddComponent<MeshRenderer>();
+                _meshRenderer.material = material;
                 _meshObject.transform.position = position3D;
-                _meshObject.transform.localScale = Vector3.one * size / 10f;
                 _meshObject.transform.SetParent(parent);
                 SetVisible(false);
+
+                _mapGenerator = mapGenerator;
+                _mapGenerator.RequestMapData(OnMapDataReceived);
             }
 
             public void Update()
@@ -89,6 +104,16 @@ namespace OctanGames.TerrainGeneration.Scripts
             public void SetVisible(bool visible)
             {
                 _meshObject.SetActive(visible);
+            }
+
+            private void OnMapDataReceived(MapData mapData)
+            {
+                _mapGenerator.RequestMeshData(mapData, OnMeshDataReceived);
+            }
+
+            private void OnMeshDataReceived(MeshData meshData)
+            {
+                _meshFilter.mesh = meshData.CreateMesh();
             }
         }
     }

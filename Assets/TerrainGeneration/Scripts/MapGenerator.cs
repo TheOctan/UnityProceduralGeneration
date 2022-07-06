@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Threading;
 using OctanGames.TerrainGeneration.Scripts.Data;
 using OctanGames.TerrainGeneration.Scripts.Preset;
 using UnityEngine;
@@ -18,21 +21,40 @@ namespace OctanGames.TerrainGeneration.Scripts
 
         [SerializeField] private DrawMode _drawMode;
         [SerializeField, Range(0, 6)] private int _levelOfDetail;
-
         [Space] [SerializeField] private float _noiseScale = 25f;
-
         [Space] [SerializeField, Min(0)] private int _octaves = 5;
         [SerializeField, Range(0, 1)] private float _persistance = 0.5f;
         [SerializeField, Min(1)] private float _lacunarity = 2f;
         [SerializeField, Min(1)] private float _meshHeight = 15;
         [SerializeField] private AnimationCurve _meshHeightCurve;
-
         [Space] [SerializeField] private int _seed;
         [SerializeField] private Vector2 _offset;
-
         [Space] [SerializeField] private TerrainPreset _terrainPreset;
 
+        private readonly Queue<MapThreadInfo<MapData>> _mapDataThreadInfoQueue = new();
+        private readonly Queue<MapThreadInfo<MeshData>> _meshDataThreadInfoQueue = new();
         private MapRenderer _renderer;
+
+        private void Update()
+        {
+            lock (_mapDataThreadInfoQueue)
+            {
+                while(_mapDataThreadInfoQueue.Count > 0)
+                {
+                    MapThreadInfo<MapData> threadInfo = _mapDataThreadInfoQueue.Dequeue();
+                    threadInfo.Callback?.Invoke(threadInfo.Parameter);
+                }
+            }
+
+            lock (_meshDataThreadInfoQueue)
+            {
+                while (_meshDataThreadInfoQueue.Count > 0)
+                {
+                    MapThreadInfo<MeshData> threadInfo = _meshDataThreadInfoQueue.Dequeue();
+                    threadInfo.Callback?.Invoke(threadInfo.Parameter);
+                }
+            }
+        }
 
         public void DrawMapInEditor()
         {
@@ -74,6 +96,38 @@ namespace OctanGames.TerrainGeneration.Scripts
             }
         }
 
+        public void RequestMapData(Action<MapData> callback)
+        {
+            var thread = new Thread(() =>
+            {
+                MapData mapData = GenerateMapData();
+                lock (_mapDataThreadInfoQueue)
+                {
+                    _mapDataThreadInfoQueue.Enqueue(new MapThreadInfo<MapData>(callback, mapData));
+                }
+            });
+            thread.Start();
+        }
+
+        public void RequestMeshData(MapData mapData, Action<MeshData> callback)
+        {
+            var thread = new Thread(() =>
+            {
+                AnimationCurve heightCurve;
+                lock (_meshHeightCurve)
+                {
+                    heightCurve = new AnimationCurve(_meshHeightCurve.keys);
+                }
+                MeshData meshData =
+                    MeshGenerator.GenerateTerrainMesh(mapData.HeightMap, _meshHeight, heightCurve, _levelOfDetail);
+                lock (_meshDataThreadInfoQueue)
+                {
+                    _meshDataThreadInfoQueue.Enqueue(new MapThreadInfo<MeshData>(callback, meshData));
+                }
+            });
+            thread.Start();
+        }
+
         private MapData GenerateMapData()
         {
             float[,] noiseMap =
@@ -107,6 +161,18 @@ namespace OctanGames.TerrainGeneration.Scripts
         private void Reset()
         {
             DrawMapInEditor();
+        }
+
+        private struct MapThreadInfo<T>
+        {
+            public Action<T> Callback { get; }
+            public T Parameter { get; }
+
+            public MapThreadInfo(Action<T> callback, T parameter)
+            {
+                Callback = callback;
+                Parameter = parameter;
+            }
         }
     }
 }
