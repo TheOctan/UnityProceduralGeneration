@@ -215,7 +215,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _drawMode: 2
-  _levelOfDetail: 0
+  _previewLOD: 0
   _noiseScale: 25
   _octaves: 5
   _persistance: 0.5
@@ -284,5 +284,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66c9ac917640fd04181f693c560726b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _detailLevles:
+  - lod: 0
+    visibleDistanceThreshold: 200
+  - lod: 1
+    visibleDistanceThreshold: 400
+  - lod: 2
+    visibleDistanceThreshold: 600
   _material: {fileID: 2100000, guid: 48c0baa1ec5a14440b9e8858f2ac2301, type: 2}
   _viewer: {fileID: 0}

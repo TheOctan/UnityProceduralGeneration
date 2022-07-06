@@ -20,7 +20,7 @@ namespace OctanGames.TerrainGeneration.Scripts
         public const int MAP_CHUNK_SIZE = 241;
 
         [SerializeField] private DrawMode _drawMode;
-        [SerializeField, Range(0, 6)] private int _levelOfDetail;
+        [SerializeField, Range(0, 6)] private int _previewLOD;
         [Space] [SerializeField] private float _noiseScale = 25f;
         [Space] [SerializeField, Min(0)] private int _octaves = 5;
         [SerializeField, Range(0, 1)] private float _persistance = 0.5f;
@@ -82,7 +82,7 @@ namespace OctanGames.TerrainGeneration.Scripts
                 case DrawMode.Mesh:
                 {
                     MeshData mesh =
-                        MeshGenerator.GenerateTerrainMesh(heightMap, _meshHeight, _meshHeightCurve, _levelOfDetail);
+                        MeshGenerator.GenerateTerrainMesh(heightMap, _meshHeight, _meshHeightCurve, _previewLOD);
                     Texture2D texture =
                         TextureGenerator.TextureFromColorMap(colorMap, MAP_CHUNK_SIZE, MAP_CHUNK_SIZE);
                     _renderer.DrawMesh(mesh, texture);
@@ -109,7 +109,7 @@ namespace OctanGames.TerrainGeneration.Scripts
             thread.Start();
         }
 
-        public void RequestMeshData(MapData mapData, Action<MeshData> callback)
+        public void RequestMeshData(MapData mapData, int lod, Action<MeshData> callback)
         {
             var thread = new Thread(() =>
             {
@@ -119,7 +119,7 @@ namespace OctanGames.TerrainGeneration.Scripts
                     heightCurve = new AnimationCurve(_meshHeightCurve.keys);
                 }
                 MeshData meshData =
-                    MeshGenerator.GenerateTerrainMesh(mapData.HeightMap, _meshHeight, heightCurve, _levelOfDetail);
+                    MeshGenerator.GenerateTerrainMesh(mapData.HeightMap, _meshHeight, heightCurve, lod);
                 lock (_meshDataThreadInfoQueue)
                 {
                     _meshDataThreadInfoQueue.Enqueue(new MapThreadInfo<MeshData>(callback, meshData));
