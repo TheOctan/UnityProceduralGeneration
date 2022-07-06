@@ -2,7 +2,7 @@ using System;
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace OctanGames.TerrainGeneration.Scripts
+namespace OctanGames.TerrainGeneration.Scripts.Preset
 {
     [Serializable]
     public struct TerrainType

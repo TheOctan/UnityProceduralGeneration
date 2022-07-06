@@ -1,3 +1,4 @@
+using OctanGames.TerrainGeneration.Scripts.Data;
 using UnityEngine;
 
 namespace OctanGames.TerrainGeneration.Scripts
