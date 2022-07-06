@@ -1,3 +1,5 @@
+using OctanGames.TerrainGeneration.Scripts.Data;
+using OctanGames.TerrainGeneration.Scripts.Preset;
 using UnityEngine;
 
 namespace OctanGames.TerrainGeneration.Scripts
@@ -32,7 +34,47 @@ namespace OctanGames.TerrainGeneration.Scripts
 
         private MapRenderer _renderer;
 
-        public void GenerateMap()
+        public void DrawMapInEditor()
+        {
+            MapData mapData = GenerateMapData();
+            float[,] heightMap = mapData.HeightMap;
+            Color[] colorMap = mapData.ColorMap;
+
+            _renderer = GetComponent<MapRenderer>();
+
+            switch (_drawMode)
+            {
+                case DrawMode.NoiseMap:
+                {
+                    Texture2D texture = TextureGenerator.TextureFromHeightMap(heightMap);
+                    _renderer.DrawTexture(texture);
+                    break;
+                }
+                case DrawMode.ColorMap:
+                {
+                    Texture2D texture =
+                        TextureGenerator.TextureFromColorMap(colorMap, MAP_CHUNK_SIZE, MAP_CHUNK_SIZE);
+                    _renderer.DrawTexture(texture);
+                    break;
+                }
+                case DrawMode.Mesh:
+                {
+                    MeshData mesh =
+                        MeshGenerator.GenerateTerrainMesh(heightMap, _meshHeight, _meshHeightCurve, _levelOfDetail);
+                    Texture2D texture =
+                        TextureGenerator.TextureFromColorMap(colorMap, MAP_CHUNK_SIZE, MAP_CHUNK_SIZE);
+                    _renderer.DrawMesh(mesh, texture);
+                    break;
+                }
+                default:
+                {
+                    Debug.LogError("Undefined type of draw mode");
+                    break;
+                }
+            }
+        }
+
+        private MapData GenerateMapData()
         {
             float[,] noiseMap =
                 Noise.GenerateNoiseMap(MAP_CHUNK_SIZE, MAP_CHUNK_SIZE,
@@ -59,43 +101,12 @@ namespace OctanGames.TerrainGeneration.Scripts
                 }
             }
 
-            _renderer = GetComponent<MapRenderer>();
-
-            switch (_drawMode)
-            {
-                case DrawMode.NoiseMap:
-                {
-                    Texture2D texture = TextureGenerator.TextureFromHeightMap(noiseMap);
-                    _renderer.DrawTexture(texture);
-                    break;
-                }
-                case DrawMode.ColorMap:
-                {
-                    Texture2D texture =
-                        TextureGenerator.TextureFromColorMap(colorMap, MAP_CHUNK_SIZE, MAP_CHUNK_SIZE);
-                    _renderer.DrawTexture(texture);
-                    break;
-                }
-                case DrawMode.Mesh:
-                {
-                    MeshData mesh = 
-                        MeshGenerator.GenerateTerrainMesh(noiseMap, _meshHeight, _meshHeightCurve, _levelOfDetail);
-                    Texture2D texture = 
-                        TextureGenerator.TextureFromColorMap(colorMap, MAP_CHUNK_SIZE, MAP_CHUNK_SIZE);
-                    _renderer.DrawMesh(mesh, texture);
-                    break;
-                }
-                default:
-                {
-                    Debug.LogError("Undefined type of draw mode");
-                    break;
-                }
-            }
+            return new MapData(noiseMap, colorMap);
         }
 
         private void Reset()
         {
-            GenerateMap();
+            DrawMapInEditor();
         }
     }
 }

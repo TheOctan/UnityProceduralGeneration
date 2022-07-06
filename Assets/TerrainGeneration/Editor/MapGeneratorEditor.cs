@@ -19,14 +19,14 @@ namespace OctanGames.TerrainGeneration.Editor
         {
             if (DrawDefaultInspector() && _autoGenerate)
             {
-                _mapGenerator.GenerateMap();
+                _mapGenerator.DrawMapInEditor();
             }
 
             _autoGenerate = EditorGUILayout.Toggle("Auto Generate", _autoGenerate);
 
             if (GUILayout.Button("Generate"))
             {
-                _mapGenerator.GenerateMap();
+                _mapGenerator.DrawMapInEditor();
             }
         }
     }

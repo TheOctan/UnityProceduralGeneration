@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace OctanGames.TerrainGeneration.Scripts
+namespace OctanGames.TerrainGeneration.Scripts.Data
 {
     public class MeshData
     {

@@ -1,3 +1,4 @@
+using OctanGames.TerrainGeneration.Scripts.Data;
 using UnityEngine;
 
 namespace OctanGames.TerrainGeneration.Scripts
@@ -26,7 +27,8 @@ namespace OctanGames.TerrainGeneration.Scripts
                 for (var x = 0; x < width; x += meshSimplificationIncrement)
                 {
                     meshData.Vertices[vertexIndex] =
-                        new Vector3(topLeftX + x, heightCurve.Evaluate(heightMap[x, y]) * heightMultiplier,
+                        new Vector3(topLeftX + x, 
+                            heightCurve.Evaluate(heightMap[x, y]) * heightMultiplier,
                             topLeftZ - y);
                     meshData.Uvs[vertexIndex] = new Vector2((float)x / width, (float)y / height);
 
