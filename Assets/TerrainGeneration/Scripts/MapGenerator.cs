@@ -58,7 +58,7 @@ namespace OctanGames.TerrainGeneration.Scripts
 
         public void DrawMapInEditor()
         {
-            MapData mapData = GenerateMapData();
+            MapData mapData = GenerateMapData(Vector2.zero);
             float[,] heightMap = mapData.HeightMap;
             Color[] colorMap = mapData.ColorMap;
 
@@ -96,11 +96,11 @@ namespace OctanGames.TerrainGeneration.Scripts
             }
         }
 
-        public void RequestMapData(Action<MapData> callback)
+        public void RequestMapData(Vector2 centre, Action<MapData> callback)
         {
             var thread = new Thread(() =>
             {
-                MapData mapData = GenerateMapData();
+                MapData mapData = GenerateMapData(centre);
                 lock (_mapDataThreadInfoQueue)
                 {
                     _mapDataThreadInfoQueue.Enqueue(new MapThreadInfo<MapData>(callback, mapData));
@@ -128,11 +128,11 @@ namespace OctanGames.TerrainGeneration.Scripts
             thread.Start();
         }
 
-        private MapData GenerateMapData()
+        private MapData GenerateMapData(Vector2 centre)
         {
             float[,] noiseMap =
                 Noise.GenerateNoiseMap(MAP_CHUNK_SIZE, MAP_CHUNK_SIZE,
-                    _seed, _noiseScale, _octaves, _persistance, _lacunarity, _offset);
+                    _seed, _noiseScale, _octaves, _persistance, _lacunarity, centre + _offset);
 
             var colorMap = new Color[MAP_CHUNK_SIZE * MAP_CHUNK_SIZE];
             if (!ReferenceEquals(_terrainPreset, null))

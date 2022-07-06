@@ -53,7 +53,7 @@ namespace OctanGames.TerrainGeneration.Scripts
             }
 
             _mapGenerator = mapGenerator;
-            _mapGenerator.RequestMapData(OnMapDataReceived);
+            _mapGenerator.RequestMapData(position, OnMapDataReceived);
         }
 
         public void Update()
