@@ -5,7 +5,7 @@ namespace OctanGames.TerrainGeneration.Scripts
 {
     public class EndlessTerrain : MonoBehaviour
     {
-        private const float MAX_VIEW_DISTANCE = 300;
+        private const float MAX_VIEW_DISTANCE = 450;
 
         [SerializeField] private Transform _viewer;
         private readonly Dictionary<Vector2, TerrainChunk> _terrainChunks = new();
@@ -53,7 +53,7 @@ namespace OctanGames.TerrainGeneration.Scripts
                     }
                     else
                     {
-                        _terrainChunks.Add(viewedChunkCoord, new TerrainChunk(viewedChunkCoord, ChunkSize));
+                        _terrainChunks.Add(viewedChunkCoord, new TerrainChunk(viewedChunkCoord, ChunkSize, transform));
                     }
                 }
             }
@@ -66,7 +66,7 @@ namespace OctanGames.TerrainGeneration.Scripts
             private Bounds _bounds;
             public bool IsVisible => _meshObject.activeSelf;
 
-            public TerrainChunk(Vector2 coord, int size)
+            public TerrainChunk(Vector2 coord, int size, Transform parent)
             {
                 _position = coord * size;
                 var position3D = new Vector3(_position.x, 0, _position.y);
@@ -75,6 +75,7 @@ namespace OctanGames.TerrainGeneration.Scripts
                 _meshObject = GameObject.CreatePrimitive(PrimitiveType.Plane);
                 _meshObject.transform.position = position3D;
                 _meshObject.transform.localScale = Vector3.one * size / 10f;
+                _meshObject.transform.SetParent(parent);
                 SetVisible(false);
             }
 
