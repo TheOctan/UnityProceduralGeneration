@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using OctanGames.TerrainGeneration.Scripts.Data;
 using UnityEngine;
 
 namespace OctanGames.TerrainGeneration.Scripts
@@ -18,10 +16,10 @@ namespace OctanGames.TerrainGeneration.Scripts
         [SerializeField] private Transform _viewer;
 
         private readonly Dictionary<Vector2, TerrainChunk> _terrainChunks = new();
-        private readonly List<TerrainChunk> _lastUpdatedChunks = new();
         private MapGenerator _mapGenerator;
         private Vector2 _lastViewerPosition;
 
+        public static List<TerrainChunk> LastUpdatedChunks { get; } = new();
         public static float MaxViewDistance { get; private set; }
         public static Vector2 ViewerPosition { get; private set; }
         private static int ChunkSize => MapGenerator.MAP_CHUNK_SIZE - 1;
@@ -37,19 +35,19 @@ namespace OctanGames.TerrainGeneration.Scripts
 
         private void Update()
         {
-            ViewerPosition = new Vector2(_viewer.position.x, _viewer.position.z);
+            Vector3 position = _viewer.position;
+            ViewerPosition = new Vector2(position.x, position.z);
             if ((_lastViewerPosition - ViewerPosition).sqrMagnitude >= SQR_VIEWER_MOVE_THRESHOLD_FOR_CHUNK_UPDATE)
             {
                 _lastViewerPosition = ViewerPosition;
                 UpdateVisibleChunks();
-                print("Update");
             }
         }
 
         private void UpdateVisibleChunks()
         {
-            _lastUpdatedChunks.ForEach(chunk => chunk.SetVisible(false));
-            _lastUpdatedChunks.Clear();
+            LastUpdatedChunks.ForEach(chunk => chunk.SetVisible(false));
+            LastUpdatedChunks.Clear();
 
             int currentChunkCoordX = Mathf.RoundToInt(ViewerPosition.x / ChunkSize);
             int currentChunkCoordY = Mathf.RoundToInt(ViewerPosition.y / ChunkSize);
@@ -62,13 +60,7 @@ namespace OctanGames.TerrainGeneration.Scripts
 
                     if (_terrainChunks.ContainsKey(viewedChunkCoord))
                     {
-                        TerrainChunk chunk = _terrainChunks[viewedChunkCoord];
-                        chunk.Update();
-
-                        if (chunk.IsVisible)
-                        {
-                            _lastUpdatedChunks.Add(chunk);
-                        }
+                        _terrainChunks[viewedChunkCoord].Update();
                     }
                     else
                     {

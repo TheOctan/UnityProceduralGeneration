@@ -97,6 +97,8 @@ namespace OctanGames.TerrainGeneration.Scripts
                         lodMesh.RequestMesh(_mapData, _mapGenerator);
                     }
                 }
+
+                EndlessTerrain.LastUpdatedChunks.Add(this);
             }
 
             SetVisible(visible);
