@@ -24,15 +24,15 @@ namespace OctanGames
 
         public static float CoordinateToColor(float value)
         {
-            // XYZ => -1..1
-            // RGB => 0..1
+            // XYZ=[-1..1] => RGB=[0..1]
+            // return Mathf.InverseLerp(-1, 1, value);
             return (value + 1) * 0.5f;
         }
 
         public static float ColorToCoordinate(float value)
         {
-            // RGB => 0..1
-            // XYZ => -1..1
+            // RGB=[0..1] => XYZ=[-1..1]
+            // return Mathf.Lerp(-1, 1, value);
             return value * 2 - 1;
         }
 

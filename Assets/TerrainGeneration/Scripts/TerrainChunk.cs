@@ -19,15 +19,11 @@ namespace OctanGames.TerrainGeneration.Scripts
         private int _prevLODIndex = -1;
         private bool _mapDataReceived;
 
-        private Vector2 _viewerPosition;
-        private float _maxViewDistance;
-
         public bool IsVisible => _meshObject.activeSelf;
 
         public TerrainChunk(Vector2 coord, int size,
             LODInfo[] detailLevels, Transform parent,
-            Material material, MapGenerator mapGenerator,
-            Vector2 viewerPosition, float maxViewDistance)
+            Material material, MapGenerator mapGenerator)
         {
             Vector2 position = coord * size;
             var position3D = new Vector3(position.x, 0, position.y);
@@ -41,9 +37,6 @@ namespace OctanGames.TerrainGeneration.Scripts
             _meshObject.transform.position = position3D;
             _meshObject.transform.SetParent(parent);
             SetVisible(false);
-
-            _viewerPosition = viewerPosition;
-            _maxViewDistance = maxViewDistance;
 
             _lodMeshes = new LODMesh[_detailLevels.Length];
             for (var i = 0; i < _detailLevels.Length; i++)
@@ -130,7 +123,7 @@ namespace OctanGames.TerrainGeneration.Scripts
         public bool HasRequestedMesh { get; private set; }
         public bool HasMesh { get; private set; }
 
-        private Action _updateCallback;
+        private readonly Action _updateCallback;
         private readonly int _lod;
 
         public LODMesh(int lod, Action updateCallback)

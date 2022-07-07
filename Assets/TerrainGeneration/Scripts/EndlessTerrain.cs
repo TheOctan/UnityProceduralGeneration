@@ -66,8 +66,7 @@ namespace OctanGames.TerrainGeneration.Scripts
                     {
                         _terrainChunks.Add(viewedChunkCoord,
                             new TerrainChunk(viewedChunkCoord,
-                                ChunkSize, _detailLevles, transform, _material,
-                                _mapGenerator, ViewerPosition, MaxViewDistance));
+                                ChunkSize, _detailLevles, transform, _material, _mapGenerator));
                     }
                 }
             }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Random = System.Random;
 
@@ -5,26 +6,39 @@ namespace OctanGames.TerrainGeneration.Scripts
 {
     public static class Noise
     {
+        public enum NormaliseMode
+        {
+            Local,
+            Global
+        }
+        
         private const int OFFSET_RANGE = 100000;
 
         public static float[,] GenerateNoiseMap(
             int width, int height,
-            int seed,
-            float scale,
+            int seed, float scale,
             int octaves,
             float persistance,
             float lacunarity,
-            Vector2 offset)
+            Vector2 offset,
+            NormaliseMode normaliseMode)
         {
             var noiseMap = new float[width, height];
 
             var random = new Random(seed);
             var octavesOffsets = new Vector2[octaves];
+
+            float maxPossibleHeight = 0;
+            var amplitude = 1f;
+
             for (var i = 0; i < octaves; i++)
             {
                 float offsetX = random.Next(-OFFSET_RANGE, OFFSET_RANGE) + offset.x;
                 float offsetY = random.Next(-OFFSET_RANGE, OFFSET_RANGE) - offset.y;
                 octavesOffsets[i] = new Vector2(offsetX, offsetY);
+
+                maxPossibleHeight += amplitude;
+                amplitude *= persistance;
             }
 
             if (scale <= 0)
@@ -32,8 +46,8 @@ namespace OctanGames.TerrainGeneration.Scripts
                 scale = 0.001f;
             }
 
-            var maxNoiseHeight = float.MinValue;
-            var minNoiseHeight = float.MaxValue;
+            var maxLocalNoiseHeight = float.MinValue;
+            var minLocalNoiseHeight = float.MaxValue;
 
             float halfWidth = width * 0.5f;
             float halfHeight = height * 0.5f;
@@ -42,7 +56,7 @@ namespace OctanGames.TerrainGeneration.Scripts
             {
                 for (var x = 0; x < width; x++)
                 {
-                    var amplitude = 1f;
+                    amplitude = 1f;
                     var frequency = 1f;
                     var noiseHeight = 0f;
 
@@ -58,20 +72,38 @@ namespace OctanGames.TerrainGeneration.Scripts
                         frequency *= lacunarity;
                     }
 
-                    if (noiseHeight > maxNoiseHeight)
+                    if (noiseHeight > maxLocalNoiseHeight)
                     {
-                        maxNoiseHeight = noiseHeight;
+                        maxLocalNoiseHeight = noiseHeight;
                     }
-                    else if (noiseHeight < minNoiseHeight)
+                    else if (noiseHeight < minLocalNoiseHeight)
                     {
-                        minNoiseHeight = noiseHeight;
+                        minLocalNoiseHeight = noiseHeight;
                     }
 
                     noiseMap[x, y] = noiseHeight;
                 }
             }
 
-            noiseMap.Normalize(minNoiseHeight, maxNoiseHeight);
+            switch (normaliseMode)
+            {
+                case NormaliseMode.Local:
+                    noiseMap.Normalize(minLocalNoiseHeight, maxLocalNoiseHeight);
+                    break;
+                case NormaliseMode.Global:
+                    for (var y = 0; y < height; y++)
+                    {
+                        for (var x = 0; x < width; x++)
+                        {
+                            float normalizedHeight = (noiseMap[x, y] + 1) / (maxPossibleHeight);
+                            noiseMap[x, y] = normalizedHeight;
+                        }
+                    }
+                    break;
+                default:
+                    Debug.Log("Undefined type of noise normalization");
+                    break;
+            }
 
             return noiseMap;
         }
