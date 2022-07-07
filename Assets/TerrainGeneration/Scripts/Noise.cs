@@ -23,7 +23,7 @@ namespace OctanGames.TerrainGeneration.Scripts
             for (var i = 0; i < octaves; i++)
             {
                 float offsetX = random.Next(-OFFSET_RANGE, OFFSET_RANGE) + offset.x;
-                float offsetY = random.Next(-OFFSET_RANGE, OFFSET_RANGE) + offset.y;
+                float offsetY = random.Next(-OFFSET_RANGE, OFFSET_RANGE) - offset.y;
                 octavesOffsets[i] = new Vector2(offsetX, offsetY);
             }
 
@@ -48,8 +48,8 @@ namespace OctanGames.TerrainGeneration.Scripts
 
                     for (var i = 0; i < octaves; i++)
                     {
-                        float sampleX = (x - halfWidth) / scale * frequency + octavesOffsets[i].x;
-                        float sampleY = (y - halfHeight) / scale * frequency + octavesOffsets[i].y;
+                        float sampleX = (x - halfWidth + octavesOffsets[i].x) / scale * frequency;
+                        float sampleY = (y - halfHeight + octavesOffsets[i].y) / scale * frequency;
 
                         float perlinValue = LinearConverter.ColorToCoordinate(Mathf.PerlinNoise(sampleX, sampleY));
                         noiseHeight += perlinValue * amplitude;
