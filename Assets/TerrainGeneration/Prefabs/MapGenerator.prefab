@@ -214,13 +214,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf581db201675da4c8b171dc05281f6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _normaliseMode: 1
   _drawMode: 2
   _previewLOD: 0
   _noiseScale: 25
   _octaves: 5
   _persistance: 0.5
   _lacunarity: 2
-  _meshHeight: 15
+  _meshHeight: 13
   _meshHeightCurve:
     serializedVersion: 2
     m_Curve:
@@ -243,13 +244,13 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.10510674
     - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 4.1654963
-      outSlope: 4.1654963
+      time: 1.199987
+      value: 1.4253951
+      inSlope: 1.6719319
+      outSlope: 1.6719319
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.14501889
+      inWeight: 0.05884644
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -287,9 +288,9 @@ MonoBehaviour:
   _detailLevles:
   - lod: 0
     visibleDistanceThreshold: 200
-  - lod: 1
+  - lod: 4
     visibleDistanceThreshold: 400
-  - lod: 2
+  - lod: 6
     visibleDistanceThreshold: 600
   _material: {fileID: 2100000, guid: 48c0baa1ec5a14440b9e8858f2ac2301, type: 2}
   _viewer: {fileID: 0}

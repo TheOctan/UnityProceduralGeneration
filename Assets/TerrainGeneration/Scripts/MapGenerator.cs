@@ -19,6 +19,7 @@ namespace OctanGames.TerrainGeneration.Scripts
 
         public const int MAP_CHUNK_SIZE = 241;
 
+        [SerializeField] private Noise.NormaliseMode _normaliseMode;
         [SerializeField] private DrawMode _drawMode;
         [SerializeField, Range(0, 6)] private int _previewLOD;
         [Space] [SerializeField] private float _noiseScale = 25f;
@@ -132,7 +133,7 @@ namespace OctanGames.TerrainGeneration.Scripts
         {
             float[,] noiseMap =
                 Noise.GenerateNoiseMap(MAP_CHUNK_SIZE, MAP_CHUNK_SIZE,
-                    _seed, _noiseScale, _octaves, _persistance, _lacunarity, centre + _offset);
+                    _seed, _noiseScale, _octaves, _persistance, _lacunarity, centre + _offset, _normaliseMode);
 
             var colorMap = new Color[MAP_CHUNK_SIZE * MAP_CHUNK_SIZE];
             if (!ReferenceEquals(_terrainPreset, null))
@@ -145,9 +146,12 @@ namespace OctanGames.TerrainGeneration.Scripts
 
                         foreach (TerrainType region in _terrainPreset.Regions)
                         {
-                            if (currentHeight <= region.height)
+                            if (currentHeight >= region.height)
                             {
                                 colorMap[y * MAP_CHUNK_SIZE + x] = region.color;
+                            }
+                            else
+                            {
                                 break;
                             }
                         }
