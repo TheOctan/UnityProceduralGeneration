@@ -1,4 +1,7 @@
-using System;
+using System.Collections.Generic;
+using System.Linq;
+using OctanGames.Extensions;
+using OctanGames.TerrainGeneration.Scripts.Data;
 using UnityEngine;
 using Random = System.Random;
 
@@ -11,7 +14,7 @@ namespace OctanGames.TerrainGeneration.Scripts
             Local,
             Global
         }
-        
+
         private const int OFFSET_RANGE = 100000;
 
         public static float[,] GenerateNoiseMap(
@@ -28,7 +31,7 @@ namespace OctanGames.TerrainGeneration.Scripts
             var random = new Random(seed);
             var octavesOffsets = new Vector2[octaves];
 
-            float maxPossibleHeight = 0;
+            float maxPossibleNormalizedHeight = 0;
             var amplitude = 1f;
 
             for (var i = 0; i < octaves; i++)
@@ -37,7 +40,7 @@ namespace OctanGames.TerrainGeneration.Scripts
                 float offsetY = random.Next(-OFFSET_RANGE, OFFSET_RANGE) - offset.y;
                 octavesOffsets[i] = new Vector2(offsetX, offsetY);
 
-                maxPossibleHeight += amplitude;
+                maxPossibleNormalizedHeight += amplitude;
                 amplitude *= persistance;
             }
 
@@ -76,7 +79,7 @@ namespace OctanGames.TerrainGeneration.Scripts
                     {
                         maxLocalNoiseHeight = noiseHeight;
                     }
-                    else if (noiseHeight < minLocalNoiseHeight)
+                    if (noiseHeight < minLocalNoiseHeight)
                     {
                         minLocalNoiseHeight = noiseHeight;
                     }
@@ -95,8 +98,9 @@ namespace OctanGames.TerrainGeneration.Scripts
                     {
                         for (var x = 0; x < width; x++)
                         {
-                            float normalizedHeight = (noiseMap[x, y] + 1) / (maxPossibleHeight);
-                            noiseMap[x, y] = normalizedHeight;
+                            float normalizedHeight =
+                                LinearConverter.CoordinateToColor(noiseMap[x, y]) / maxPossibleNormalizedHeight * 2f;
+                            noiseMap[x, y] = Mathf.Clamp(normalizedHeight, 0, int.MaxValue);
                         }
                     }
                     break;

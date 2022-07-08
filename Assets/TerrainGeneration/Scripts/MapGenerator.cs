@@ -146,9 +146,12 @@ namespace OctanGames.TerrainGeneration.Scripts
 
                         foreach (TerrainType region in _terrainPreset.Regions)
                         {
-                            if (currentHeight <= region.height)
+                            if (currentHeight >= region.height)
                             {
                                 colorMap[y * MAP_CHUNK_SIZE + x] = region.color;
+                            }
+                            else
+                            {
                                 break;
                             }
                         }
