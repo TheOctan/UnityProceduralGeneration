@@ -34,7 +34,8 @@ namespace OctanGames.TerrainGeneration.Scripts
             _meshFilter = _meshObject.AddComponent<MeshFilter>();
             _meshRenderer = _meshObject.AddComponent<MeshRenderer>();
             _meshRenderer.material = material;
-            _meshObject.transform.position = position3D;
+            _meshObject.transform.position = position3D * EndlessTerrain.SCALE;
+            _meshObject.transform.localScale = Vector3.one * EndlessTerrain.SCALE;
             _meshObject.transform.SetParent(parent);
             SetVisible(false);
 

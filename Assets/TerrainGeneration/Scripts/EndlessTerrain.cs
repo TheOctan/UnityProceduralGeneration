@@ -6,6 +6,7 @@ namespace OctanGames.TerrainGeneration.Scripts
     [RequireComponent(typeof(MapGenerator))]
     public class EndlessTerrain : MonoBehaviour
     {
+        public const float SCALE = 1f;
         private const float VIEWER_MOVE_THRESHOLD_FOR_CHUNK_UPDATE = 25f;
 
         private const float SQR_VIEWER_MOVE_THRESHOLD_FOR_CHUNK_UPDATE =
@@ -36,7 +37,7 @@ namespace OctanGames.TerrainGeneration.Scripts
         private void Update()
         {
             Vector3 position = _viewer.position;
-            ViewerPosition = new Vector2(position.x, position.z);
+            ViewerPosition = new Vector2(position.x, position.z) / SCALE;
             if ((_lastViewerPosition - ViewerPosition).sqrMagnitude >= SQR_VIEWER_MOVE_THRESHOLD_FOR_CHUNK_UPDATE)
             {
                 _lastViewerPosition = ViewerPosition;
