@@ -215,9 +215,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _normaliseMode: 1
-  _drawMode: 2
+  _drawMode: 3
   _previewLOD: 0
-  _noiseScale: 25
+  _noiseScale: 50
   _octaves: 5
   _persistance: 0.5
   _lacunarity: 2
@@ -257,6 +257,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   _seed: 0
   _offset: {x: 0, y: 0}
+  _applyFalloffMap: 0
   _terrainPreset: {fileID: 11400000, guid: 6566769b26f425a48a88d2f601fa8464, type: 2}
 --- !u!114 &7882965324970523009
 MonoBehaviour:
