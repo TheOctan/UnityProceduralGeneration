@@ -17,7 +17,7 @@ MonoBehaviour:
     height: 0
     color: {r: 0.1368639, g: 0.26764494, b: 0.514, a: 1}
   - name: WaterShallow
-    height: 0.3
+    height: 0.12
     color: {r: 0.21568629, g: 0.40000004, b: 0.77647066, a: 1}
   - name: Sand
     height: 0.36
