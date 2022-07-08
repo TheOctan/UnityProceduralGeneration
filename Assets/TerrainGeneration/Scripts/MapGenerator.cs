@@ -14,6 +14,7 @@ namespace OctanGames.TerrainGeneration.Scripts
         {
             NoiseMap,
             ColorMap,
+            FalloffMap,
             Mesh
         }
 
@@ -30,11 +31,18 @@ namespace OctanGames.TerrainGeneration.Scripts
         [SerializeField] private AnimationCurve _meshHeightCurve;
         [Space] [SerializeField] private int _seed;
         [SerializeField] private Vector2 _offset;
+        [SerializeField] private bool _applyFalloffMap;
         [Space] [SerializeField] private TerrainPreset _terrainPreset;
 
         private readonly Queue<MapThreadInfo<MapData>> _mapDataThreadInfoQueue = new();
         private readonly Queue<MapThreadInfo<MeshData>> _meshDataThreadInfoQueue = new();
+        private float[,] _falloffMap;
         private MapRenderer _renderer;
+
+        private void Awake()
+        {
+            _falloffMap = FalloffGenerator.GenerateFalloffMap(MAP_CHUNK_SIZE);
+        }
 
         private void Update()
         {
@@ -57,6 +65,11 @@ namespace OctanGames.TerrainGeneration.Scripts
             }
         }
 
+        private void OnValidate()
+        {
+            _falloffMap = FalloffGenerator.GenerateFalloffMap(MAP_CHUNK_SIZE);
+        }
+
         public void DrawMapInEditor()
         {
             MapData mapData = GenerateMapData(Vector2.zero);
@@ -77,6 +90,13 @@ namespace OctanGames.TerrainGeneration.Scripts
                 {
                     Texture2D texture =
                         TextureGenerator.TextureFromColorMap(colorMap, MAP_CHUNK_SIZE, MAP_CHUNK_SIZE);
+                    _renderer.DrawTexture(texture);
+                    break;
+                }
+                case DrawMode.FalloffMap:
+                {
+                    float[,] falloffMap = FalloffGenerator.GenerateFalloffMap(MAP_CHUNK_SIZE);
+                    Texture2D texture = TextureGenerator.TextureFromHeightMap(falloffMap);
                     _renderer.DrawTexture(texture);
                     break;
                 }
@@ -142,6 +162,11 @@ namespace OctanGames.TerrainGeneration.Scripts
                 {
                     for (var x = 0; x < MAP_CHUNK_SIZE; x++)
                     {
+                        if (_applyFalloffMap)
+                        {
+                            noiseMap[x, y] = Mathf.Clamp01(noiseMap[x, y] - _falloffMap[x, y]);
+                        }
+
                         float currentHeight = noiseMap[x, y];
 
                         foreach (TerrainType region in _terrainPreset.Regions)
