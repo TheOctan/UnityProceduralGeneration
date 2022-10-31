@@ -1,8 +1,8 @@
-Shader "Unlit/Shader1"
+Shader "Unlit/Color"
 {
     Properties
     {
-        _Value ("Value", Float) = 0.5
+        _Color("Color", Color) = (1,1,1,1)
     }
     SubShader
     {
@@ -16,16 +16,11 @@ Shader "Unlit/Shader1"
 
             #include "UnityCG.cginc"
 
-            float _Value;
+            float4 _Color;
 
             struct VertexData
             {
                 float4 vertex : POSITION;   // vertex position
-                float3 normals : NORMAL;    // 
-                float4 tangent : TANGENT;   // 
-                float4 color : COLOR;       // 
-                float2 uv0 : TEXCOORD0;     // uv0 diffuse/normal map textures
-                float2 uv1 : TEXCOORD1;     // uv1 coordinates lightmap coordinates
             };
 
             struct Interpolators
@@ -42,8 +37,7 @@ Shader "Unlit/Shader1"
 
             float4 frag (Interpolators i) : SV_Target
             {
-                
-                return float4(1,0,0,1);
+                return _Color;
             }
             ENDCG
         }
