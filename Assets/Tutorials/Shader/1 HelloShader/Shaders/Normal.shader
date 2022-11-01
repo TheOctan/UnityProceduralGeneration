@@ -1,4 +1,4 @@
-Shader "Custom/Unlit/LocalNormal"
+Shader "Custom/Unlit/Normal"
 {
     SubShader
     {
@@ -30,7 +30,7 @@ Shader "Custom/Unlit/LocalNormal"
             {
                 Interpolators output;
                 output.vertex = UnityObjectToClipPos(v.vertex); // local space to clip space
-                output.normal = v.normal;
+                output.normal = UnityObjectToWorldNormal(v.normal);
                 return output;
             }
 
