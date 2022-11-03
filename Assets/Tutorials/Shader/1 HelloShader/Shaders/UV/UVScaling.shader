@@ -23,14 +23,12 @@ Shader "Custom/Unlit/UV/UVScaling"
             struct VertexData
             {
                 float4 vertex : POSITION;   // vertex position
-                float3 normal : NORMAL;
                 float2 uv : TEXCOORD0;
             };
 
             struct Interpolators
             {
                 float4 vertex : SV_POSITION;    // clip space position
-                float3 normal : NORMAL;         // local normal
                 float2 uv : TEXCOORD0;
             };
 
@@ -38,7 +36,6 @@ Shader "Custom/Unlit/UV/UVScaling"
             {
                 Interpolators output;
                 output.vertex = UnityObjectToClipPos(v.vertex); // local space to clip space
-                output.normal = UnityObjectToWorldNormal(v.normal);
                 output.uv = (v.uv + _Offset) * _Scale;
                 return output;
             }

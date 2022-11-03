@@ -15,14 +15,12 @@ Shader "Custom/Unlit/UV/Color"
             struct VertexData
             {
                 float4 vertex : POSITION;   // vertex position
-                float3 normal : NORMAL;
                 float2 uv : TEXCOORD0;
             };
 
             struct Interpolators
             {
                 float4 vertex : SV_POSITION;    // clip space position
-                float3 normal : NORMAL;         // local normal
                 float2 uv : TEXCOORD0;
             };
 
@@ -30,7 +28,6 @@ Shader "Custom/Unlit/UV/Color"
             {
                 Interpolators output;
                 output.vertex = UnityObjectToClipPos(v.vertex); // local space to clip space
-                output.normal = UnityObjectToWorldNormal(v.normal);
                 output.uv = v.uv;
                 return output;
             }

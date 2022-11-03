@@ -1,11 +1,10 @@
-Shader "Custom/Unlit/UV/UVBlending"
+Shader "Custom/Unlit/UV/UVPingPongBlending"
 {
     Properties
     {
         _ColorA ("Color A", Color) = (1,1,1,1)
         _ColorB ("Color B", Color) = (0,0,0,1)
-        _ColorStart ("Color Start", Range(0,1)) = 1
-        _ColorEnd ("Color End", Range(0,1)) = 0
+        _Repeat ("Repeate", Float) = 1
     }
     SubShader
     {
@@ -17,12 +16,13 @@ Shader "Custom/Unlit/UV/UVBlending"
             #pragma vertex vert
             #pragma fragment frag
 
+            #define TAU 6.283185307179586
+
             #include "UnityCG.cginc"
 
             float4 _ColorA;
             float4 _ColorB;
-            float _ColorStart;
-            float _ColorEnd;
+            float _Repeat;
 
             struct VertexData
             {
@@ -49,10 +49,20 @@ Shader "Custom/Unlit/UV/UVBlending"
                 return output;
             }
 
+            float pingPong(float x)
+            {
+                return abs(x * 2 - 1);
+            }
+
+            float remapToColor(float x)
+            {
+                return (x + 1) * 0.5;
+            }
+
             float4 frag (Interpolators i) : SV_Target
             {
-                float t = inverseLerp(_ColorStart, _ColorEnd, i.uv.y);
-                t = saturate(t);
+                //const float t = pingPong(frac(i.uv.y * _Repeat));
+                const float t = remapToColor(cos(i.uv.y * TAU * _Repeat));
                 return lerp(_ColorA, _ColorB, t);
             }
             ENDCG

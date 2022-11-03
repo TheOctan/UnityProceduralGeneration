@@ -22,8 +22,8 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _ColorEnd: 0.35
-    - _ColorStart: 0.6
+    - _ColorEnd: 0
+    - _ColorStart: 0.3
     m_Colors:
     - _ColorA: {r: 0.30588236, g: 0.8666667, b: 0.30588236, a: 1}
     - _ColorB: {r: 0, g: 0.34901962, b: 0.54901963, a: 1}
