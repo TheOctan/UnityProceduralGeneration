@@ -1,5 +1,12 @@
-Shader "Custom/Unlit/NormalMap"
+Shader "Custom/Unlit/UV/UVRepeateBlending"
 {
+    Properties
+    {
+        _ColorA ("Color A", Color) = (1,1,1,1)
+        _ColorB ("Color B", Color) = (0,0,0,1)
+        _ColorStart ("Color Start", Range(0,1)) = 1
+        _ColorEnd ("Color End", Range(0,1)) = 0
+    }
     SubShader
     {
         Tags { "RenderType"="Opaque" }
@@ -12,31 +19,49 @@ Shader "Custom/Unlit/NormalMap"
 
             #include "UnityCG.cginc"
 
-            float4 _Color;
+            float4 _ColorA;
+            float4 _ColorB;
+            float _ColorStart;
+            float _ColorEnd;
 
             struct VertexData
             {
                 float4 vertex : POSITION;   // vertex position
                 float3 normal : NORMAL;
+                float2 uv : TEXCOORD0;
             };
 
             struct Interpolators
             {
                 float4 vertex : SV_POSITION;    // clip space position
                 float3 normal : NORMAL;         // local normal
+                float2 uv : TEXCOORD0;
             };
+
+            float inverseLerp(float a, float b, float v)
+            {
+                return (v-a)/(b-a);
+            }
+
+            // float frac(float v)
+            // {
+            //   return v - floor(v);
+            // }
 
             Interpolators vert (VertexData v)
             {
                 Interpolators output;
                 output.vertex = UnityObjectToClipPos(v.vertex); // local space to clip space
                 output.normal = UnityObjectToWorldNormal(v.normal);
+                output.uv = v.uv;
                 return output;
             }
 
             float4 frag (Interpolators i) : SV_Target
             {
-                return fixed4((i.normal + 1) * 0.5, 1);
+                float t = inverseLerp(_ColorStart, _ColorEnd, i.uv.y);
+                t = frac(t);
+                return lerp(_ColorA, _ColorB, t);
             }
             ENDCG
         }
