@@ -1,11 +1,9 @@
-Shader "Custom/Unlit/UV/UVRepeateBlending"
+Shader "Custom/Unlit/UV/GradientScale"
 {
     Properties
     {
-        _ColorA ("Color A", Color) = (1,1,1,1)
-        _ColorB ("Color B", Color) = (0,0,0,1)
-        _ColorStart ("Color Start", Range(0,1)) = 1
-        _ColorEnd ("Color End", Range(0,1)) = 0
+        _Scale ("UV Scale", Float) = 1
+        _Offset ("UV Offset", Float) = 0
     }
     SubShader
     {
@@ -19,10 +17,8 @@ Shader "Custom/Unlit/UV/UVRepeateBlending"
 
             #include "UnityCG.cginc"
 
-            float4 _ColorA;
-            float4 _ColorB;
-            float _ColorStart;
-            float _ColorEnd;
+            float _Scale;
+            float _Offset;
 
             struct VertexData
             {
@@ -36,29 +32,17 @@ Shader "Custom/Unlit/UV/UVRepeateBlending"
                 float2 uv : TEXCOORD0;
             };
 
-            float inverseLerp(float a, float b, float v)
-            {
-                return (v-a)/(b-a);
-            }
-
-            // float frac(float v)
-            // {
-            //   return v - floor(v);
-            // }
-
             Interpolators vert (VertexData v)
             {
                 Interpolators output;
                 output.vertex = UnityObjectToClipPos(v.vertex); // local space to clip space
-                output.uv = v.uv;
+                output.uv = (v.uv + _Offset) * _Scale;
                 return output;
             }
 
             float4 frag (Interpolators i) : SV_Target
             {
-                float t = inverseLerp(_ColorStart, _ColorEnd, i.uv.y);
-                t = frac(t);
-                return lerp(_ColorA, _ColorB, t);
+                return fixed4(i.uv.yyy, 1);
             }
             ENDCG
         }

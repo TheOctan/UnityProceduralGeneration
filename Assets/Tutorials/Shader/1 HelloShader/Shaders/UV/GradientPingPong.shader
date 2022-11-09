@@ -1,4 +1,4 @@
-Shader "Custom/Unlit/UV/UVPingPongBlending"
+Shader "Custom/Unlit/UV/GradientPingPong"
 {
     Properties
     {

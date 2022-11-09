@@ -1,4 +1,4 @@
-Shader "Custom/Unlit/UV/UVBlending"
+Shader "Custom/Unlit/UV/GradientRepeate"
 {
     Properties
     {
@@ -41,6 +41,11 @@ Shader "Custom/Unlit/UV/UVBlending"
                 return (v-a)/(b-a);
             }
 
+            // float frac(float v)
+            // {
+            //   return v - floor(v);
+            // }
+
             Interpolators vert (VertexData v)
             {
                 Interpolators output;
@@ -52,7 +57,7 @@ Shader "Custom/Unlit/UV/UVBlending"
             float4 frag (Interpolators i) : SV_Target
             {
                 float t = inverseLerp(_ColorStart, _ColorEnd, i.uv.y);
-                t = saturate(t);
+                t = frac(t);
                 return lerp(_ColorA, _ColorB, t);
             }
             ENDCG

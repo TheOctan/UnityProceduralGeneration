@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: UVPingPongBlending
-  m_Shader: {fileID: 4800000, guid: bdd7cc2a3e5d7b54bb0fbead91c820a5, type: 3}
+  m_Name: GradientScale
+  m_Shader: {fileID: 4800000, guid: b8e30c4d920ff0e4cb99790f6dea890a, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -22,9 +22,7 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _Repeat: 2
-    - _Repeate: 5
-    m_Colors:
-    - _ColorA: {r: 0.30588236, g: 0.8666667, b: 0.30588236, a: 1}
-    - _ColorB: {r: 0, g: 0.34901962, b: 0.54901963, a: 1}
+    - _Offset: 0
+    - _Scale: 1
+    m_Colors: []
   m_BuildTextureStacks: []
