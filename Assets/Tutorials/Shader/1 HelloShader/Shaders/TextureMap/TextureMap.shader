@@ -1,8 +1,8 @@
-Shader "Custom/Unlit/UV/Color"
+Shader "Custom/Unlit/Texture/TextureMap"
 {
     Properties
     {
-        _UVHeightOffset ("UV Height Offset", Range(0,1)) = 0
+        [MainTexture] _MainTexture("Texture", 2D) = "white" {}
     }
     SubShader
     {
@@ -16,7 +16,7 @@ Shader "Custom/Unlit/UV/Color"
 
             #include "UnityCG.cginc"
 
-            float _UVHeightOffset;
+            sampler2D _MainTexture;
 
             struct VertexData
             {
@@ -40,7 +40,7 @@ Shader "Custom/Unlit/UV/Color"
 
             float4 frag (Interpolators i) : SV_Target
             {
-                return fixed4(i.uv, _UVHeightOffset , 1);
+                return tex2D(_MainTexture, i.uv);
             }
             ENDCG
         }
