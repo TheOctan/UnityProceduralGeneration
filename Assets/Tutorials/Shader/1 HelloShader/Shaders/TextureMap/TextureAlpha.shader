@@ -1,4 +1,4 @@
-Shader "Custom/Unlit/Texture/TextureMap"
+Shader "Custom/Unlit/Texture/Alpha"
 {
     Properties
     {
@@ -9,11 +9,18 @@ Shader "Custom/Unlit/Texture/TextureMap"
         Tags
         {
             "PreviewType"="Plane"
-            "RenderType"="Opaque"
+            "RenderType"="Transparent"
+            "Queue"="Transparent"
         }
-
         Pass
         {
+            Blend SrcAlpha OneMinusSrcAlpha // Traditional transparency
+            // Blend One OneMinusSrcAlpha // Premultiplied transparency
+            // Blend One One // Additive
+            // Blend OneMinusDstColor One // Soft additive
+            // Blend DstColor Zero // Multiplicative
+            // Blend DstColor SrcColor // 2x multiplicative
+
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
