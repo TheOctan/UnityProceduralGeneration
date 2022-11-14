@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TextureTiling
-  m_Shader: {fileID: 4800000, guid: c53b093380640c745b01d0e5d65f6d54, type: 3}
+  m_Name: TextureUVTiling1
+  m_Shader: {fileID: 4800000, guid: 4ae9db634664f0f42a335a6e865cb65b, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -20,12 +20,13 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _MainTexture:
+    - _MainTex:
         m_Texture: {fileID: 2800000, guid: 0e0422d62880ca64c8c6ea895183cb0c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _Tiling: 2
+    - _UVHeightOffset: 1
     m_Colors: []
   m_BuildTextureStacks: []

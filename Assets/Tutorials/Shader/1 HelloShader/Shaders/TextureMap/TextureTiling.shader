@@ -2,6 +2,7 @@ Shader "Custom/Unlit/Texture/Tiling"
 {
     Properties
     {
+        _Tiling ("UV Height Offset", Float) = 2
         [MainTexture] _MainTexture("Texture", 2D) = "white" {}
     }
     SubShader
@@ -9,7 +10,7 @@ Shader "Custom/Unlit/Texture/Tiling"
         Tags
         {
             "PreviewType"="Plane"
-            "RenderType"="Transparent"
+            "RenderType"="Opaque"
         }
         Pass
         {
@@ -26,6 +27,7 @@ Shader "Custom/Unlit/Texture/Tiling"
 
             #include "UnityCG.cginc"
 
+            float _Tiling;
             sampler2D _MainTexture;
 
             struct VertexData
@@ -50,7 +52,7 @@ Shader "Custom/Unlit/Texture/Tiling"
 
             float4 frag (Interpolators i) : SV_Target
             {
-                return tex2D(_MainTexture, i.uv * 2);
+                return tex2D(_MainTexture, i.uv * _Tiling);
             }
             ENDCG
         }

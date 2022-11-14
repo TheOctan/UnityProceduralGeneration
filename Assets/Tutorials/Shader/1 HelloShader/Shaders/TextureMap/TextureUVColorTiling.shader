@@ -1,10 +1,10 @@
-Shader "Custom/Unlit/Texture/TextureUV"
+Shader "Custom/Unlit/Texture/UVTiling"
 {
     Properties
     {
-        _Blend ("UV Height Offset", Range(0,1)) = 0
+        _Tiling ("UV Height Offset", Float) = 2
+        _UVHeightOffset ("UV Height Offset", Range(0,1)) = 0
         [MainTexture] _MainTex("Texture", 2D) = "white" {}
-        _SecondTex("Texture", 2D) = "white" {}
     }
     SubShader
     {
@@ -28,9 +28,9 @@ Shader "Custom/Unlit/Texture/TextureUV"
 
             #include "UnityCG.cginc"
 
-            float _Blend;
+            float _Tiling;
+            float _UVHeightOffset;
             sampler2D _MainTex;
-            sampler2D _SecondTex;
 
             struct VertexData
             {
@@ -54,9 +54,7 @@ Shader "Custom/Unlit/Texture/TextureUV"
 
             float4 frag (Interpolators i) : SV_Target
             {
-                float4 sample1 = tex2D(_MainTex, i.uv);
-                float4 sample2 = tex2D(_SecondTex, i.uv);
-                return lerp(sample1, sample2, _Blend);
+                return tex2D(_MainTex, i.uv * _Tiling) * float4(i.uv, _UVHeightOffset, 1);
             }
             ENDCG
         }
