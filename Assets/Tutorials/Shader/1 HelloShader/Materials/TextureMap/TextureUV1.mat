@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TextureUV
+  m_Name: TextureUV1
   m_Shader: {fileID: 4800000, guid: 9d413c355d15e494987ed84a280a462c, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -30,7 +30,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _UVHeightOffset: 0
+    - _UVHeightOffset: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
