@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TextureBlend
-  m_Shader: {fileID: 4800000, guid: 29da3eec564e308418ec8b6e6a9774a7, type: 3}
+  m_Name: TextureTiling
+  m_Shader: {fileID: 4800000, guid: c53b093380640c745b01d0e5d65f6d54, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -20,17 +20,11 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 0e0422d62880ca64c8c6ea895183cb0c, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SecondTex:
-        m_Texture: {fileID: 2800000, guid: 866ceca476825f84e953e4eebb93fa29, type: 3}
+    - _MainTexture:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats:
-    - _Blend: 1
-    - _UVHeightOffset: 0
+    m_Floats: []
     m_Colors: []
   m_BuildTextureStacks: []
