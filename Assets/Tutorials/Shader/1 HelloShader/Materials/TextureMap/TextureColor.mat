@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TextureAlpha
-  m_Shader: {fileID: 4800000, guid: eb41f0e8d2d6f624baff0ffd752a0c97, type: 3}
+  m_Name: TextureColor
+  m_Shader: {fileID: 4800000, guid: a6bd91e3a6bcfa94dac28c0d08469b19, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -20,15 +20,12 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 0e0422d62880ca64c8c6ea895183cb0c, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _MainTexture:
         m_Texture: {fileID: 2800000, guid: 0e0422d62880ca64c8c6ea895183cb0c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats: []
-    m_Colors: []
+    m_Colors:
+    - _Color: {r: 1, g: 0.4943396, b: 0.4943396, a: 1}
   m_BuildTextureStacks: []
