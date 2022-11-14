@@ -1,9 +1,9 @@
-Shader "Custom/Unlit/Texture/Color"
+Shader "Custom/Unlit/Texture/GrayScale"
 {
     Properties
     {
         [MainColor] _Color ("Color A", Color) = (1,1,1,1)
-        [MainTexture] _MainTexture("Texture", 2D) = "white" {}
+        [MainTexture] _MainTex("Texture", 2D) = "white" {}
     }
     SubShader
     {
@@ -28,7 +28,7 @@ Shader "Custom/Unlit/Texture/Color"
             #include "UnityCG.cginc"
 
             float4 _Color;
-            sampler2D _MainTexture;
+            sampler2D _MainTex;
 
             struct VertexData
             {
@@ -52,7 +52,9 @@ Shader "Custom/Unlit/Texture/Color"
 
             float4 frag (Interpolators i) : SV_Target
             {
-                return tex2D(_MainTexture, i.uv) * _Color;
+                float4 sample = tex2D(_MainTex, i.uv);
+                float luminance = (sample.r * 0.3 + sample.g * 0.59 + sample.b * 0.11); 
+                return float4(luminance, luminance, luminance, sample.a) * _Color;
             }
             ENDCG
         }
