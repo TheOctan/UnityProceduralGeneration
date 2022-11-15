@@ -4,10 +4,18 @@ Shader "Custom/Unlit/Distortion/WaveAnimated"
     {
         _ColorA ("Color A", Color) = (1,1,1,1)
         _ColorB ("Color B", Color) = (0,0,0,1)
-        _Speed ("Speed", Float) = 0.1
+        _ColorStart ("Color Start", Range(0,1)) = 0
+        _ColorEnd ("Color End", Range(0,1)) = 1
+
+        [Space(10)]
         _WaveRepeat ("Repeate", Float) = 5
         _WaveCount ("Wave Offset", Float) = 3
         _WaveAmplitude ("Wave Amplitude", Float) = 0.1
+        _Speed ("Speed", Float) = 0.1
+
+        [Space(10)]
+        _FadeStart ("Fade Start", Range(0,1)) = 0
+        _FadeEnd ("Fade End", Range(0,1)) = 1
     }
     SubShader
     {
@@ -28,15 +36,23 @@ Shader "Custom/Unlit/Distortion/WaveAnimated"
             #pragma fragment frag
 
             #define TAU 6.283185307179586
+            #define PI 3.14159265359
 
             #include "UnityCG.cginc"
 
             float4 _ColorA;
             float4 _ColorB;
-            float _Speed;
+            float _ColorStart;
+            float _ColorEnd;
+
             float _WaveRepeat;
             float _WaveCount;
             float _WaveAmplitude;
+
+            float _FadeStart;
+            float _FadeEnd;
+
+            float _Speed;
 
             struct VertexData
             {
@@ -52,11 +68,6 @@ Shader "Custom/Unlit/Distortion/WaveAnimated"
                 float3 normal : NORMAL;
             };
 
-            float inverseLerp(float a, float b, float v)
-            {
-                return (v-a)/(b-a);
-            }
-
             Interpolators vert (VertexData v)
             {
                 Interpolators output;
@@ -67,6 +78,11 @@ Shader "Custom/Unlit/Distortion/WaveAnimated"
                 return output;
             }
 
+            float inverseLerp(float a, float b, float v)
+            {
+                return (v-a)/(b-a);
+            }
+
             float remapToColor(float x)
             {
                 return (x + 1) * 0.5;
@@ -74,20 +90,20 @@ Shader "Custom/Unlit/Distortion/WaveAnimated"
 
             float4 frag (Interpolators i) : SV_Target
             {
-                const float yOffset = cos(i.uv.x * TAU * _WaveCount) * _WaveAmplitude * 0.01;
+                const float yOffset = cos(i.uv.x * TAU * _WaveCount) * _WaveAmplitude * 0.01 * (1 - i.uv.y);
                 const float timeOffset = _Time.y * _Speed;
-                const float fade = i.uv.y;
-
-                float t = cos((i.uv.y + yOffset - timeOffset) * TAU * _WaveRepeat);
-                t = remapToColor(t);
-                t *= fade;
+                const float waves = remapToColor(cos((i.uv.y + yOffset - timeOffset) * TAU * _WaveRepeat));
 
                 const float cullHorizontalFaces = (abs(i.normal.y) < 0.999);
-                const float waves = t * cullHorizontalFaces;
 
-                float4 gradient = lerp(_ColorA, _ColorB, i.uv.y);
+                float fade = inverseLerp(_FadeStart, _FadeEnd, i.uv.y);
+                fade = saturate(fade);
 
-                return gradient * waves;
+                float gradientRange = inverseLerp(_ColorStart, _ColorEnd, i.uv.y);
+                gradientRange = saturate(gradientRange);
+                const float4 gradient = lerp(_ColorA, _ColorB, gradientRange);
+
+                return waves * fade * cullHorizontalFaces * gradient;
             }
             ENDCG
         }
