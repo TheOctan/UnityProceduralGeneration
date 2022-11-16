@@ -2,18 +2,20 @@ Shader "Custom/Unlit/Distortion/WaveAnimated"
 {
     Properties
     {
+        [Header(Gradient)]
         _ColorA ("Color A", Color) = (1,1,1,1)
         _ColorB ("Color B", Color) = (0,0,0,1)
         _ColorStart ("Color Start", Range(0,1)) = 0
         _ColorEnd ("Color End", Range(0,1)) = 1
 
-        [Space(10)]
+        [Header(Wave)]
         _WaveRepeat ("Repeate", Float) = 5
         _WaveCount ("Wave Offset", Float) = 3
         _WaveAmplitude ("Wave Amplitude", Float) = 0.1
         _Speed ("Speed", Float) = 0.1
 
-        [Space(10)]
+        [Header(Fade)]
+        _ConeOffset ("Cone Offset", Float) = 0
         _FadeStart ("Fade Start", Range(0,1)) = 0
         _FadeEnd ("Fade End", Range(0,1)) = 1
     }
@@ -49,6 +51,7 @@ Shader "Custom/Unlit/Distortion/WaveAnimated"
             float _WaveCount;
             float _WaveAmplitude;
 
+            float _ConeOffset;
             float _FadeStart;
             float _FadeEnd;
 
@@ -71,6 +74,8 @@ Shader "Custom/Unlit/Distortion/WaveAnimated"
             Interpolators vert (VertexData v)
             {
                 Interpolators output;
+
+                v.vertex = v.vertex + float4(v.normal * (1 - v.uv.y) * _ConeOffset, 0);
                 output.vertex = UnityObjectToClipPos(v.vertex); // local space to clip space
                 output.uv = v.uv;
                 output.normal = v.normal;

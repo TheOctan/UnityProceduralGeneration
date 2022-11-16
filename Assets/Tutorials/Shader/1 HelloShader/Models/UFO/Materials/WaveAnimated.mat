@@ -24,6 +24,7 @@ Material:
     m_Floats:
     - _ColorEnd: 1
     - _ColorStart: 0
+    - _ConeOffset: 0.39
     - _FadeEnd: 1
     - _FadeStart: 0
     - _FaderEnd: 1
