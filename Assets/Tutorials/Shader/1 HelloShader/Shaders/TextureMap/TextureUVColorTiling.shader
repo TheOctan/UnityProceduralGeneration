@@ -12,6 +12,7 @@ Shader "Custom/Unlit/Texture/UVTiling"
         {
             "PreviewType"="Plane"
             "RenderType"="Opaque"
+            "Queue"="Transparent"
         }
         Pass
         {

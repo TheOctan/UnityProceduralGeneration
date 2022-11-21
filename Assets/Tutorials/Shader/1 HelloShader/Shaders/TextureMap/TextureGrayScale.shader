@@ -11,6 +11,7 @@ Shader "Custom/Unlit/Texture/GrayScale"
         {
             "PreviewType"="Plane"
             "RenderType"="Opaque"
+            "Queue"="Transparent"
         }
         Pass
         {

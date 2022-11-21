@@ -10,6 +10,7 @@ Shader "Custom/Unlit/Texture/Alpha"
         {
             "PreviewType"="Plane"
             "RenderType"="Transparent"
+            "Queue"="Transparent"
         }
         Pass
         {
