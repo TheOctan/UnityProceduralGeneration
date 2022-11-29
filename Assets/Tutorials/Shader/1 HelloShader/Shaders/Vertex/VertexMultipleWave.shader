@@ -73,10 +73,10 @@ Shader "Custom/Unlit/Vertex/MultipleWave"
             {
                 const float gradient = falloffMap(i.uv);
                 const float timeOffset = _Time.y * _Speed;
-                const float waveX = remapToColor(cos((i.uv.x - timeOffset) * TAU * _WaveCount));
-                const float waveY = remapToColor(cos((i.uv.y - timeOffset) * TAU * _WaveCount));
+                const float waveX = cos((i.uv.x - timeOffset) * TAU * _WaveCount);
+                const float waveY = cos((i.uv.y - timeOffset) * TAU * _WaveCount);
 
-                return waveX * waveY * gradient;
+                return remapToColor(waveX * waveY) * gradient;
             }
             ENDCG
         }
