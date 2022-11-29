@@ -38,24 +38,27 @@ Shader "Custom/Unlit/Vertex/Wave"
                 float2 uv : TEXCOORD0;
             };
 
-            float inverseLerp(float a, float b, float v)
-            {
-                return (v-a)/(b-a);
-            }
-
             float remapToColor(float x)
             {
                 return (x + 1) * 0.5;
+            }
+
+            float gradient(float2 uv)
+            {
+                return 1 - cos(uv.x * TAU);
+            }
+
+            float wave(float2 uv)
+            {
+                const float timeOffset = _Time.y * _Speed;
+                return cos((uv.x - timeOffset) * TAU * _WaveCount);
             }
 
             Interpolators vert (VertexData v)
             {
                 Interpolators output;
 
-                const float gradient = 1 - cos(v.uv.x * TAU);
-                const float timeOffset = _Time.y * _Speed;
-                const float wave = cos((v.uv.x - timeOffset) * TAU * _WaveCount);
-                v.vertex.z = wave * gradient * _WaveAmplitude * 0.001;
+                v.vertex.z = wave(v.uv) * gradient(v.uv) * _WaveAmplitude * 0.001;
 
                 output.vertex = UnityObjectToClipPos(v.vertex); // local space to clip space
                 output.uv = v.uv;
@@ -64,11 +67,7 @@ Shader "Custom/Unlit/Vertex/Wave"
 
             float4 frag (Interpolators i) : SV_Target
             {
-                const float gradient = 1 - cos(i.uv.x * TAU);
-                const float timeOffset = _Time.y * _Speed;
-                const float wave = cos((i.uv.x - timeOffset) * TAU * _WaveCount);
-
-                return remapToColor(wave) * gradient;
+                return remapToColor(wave(i.uv)) * gradient(i.uv);
             }
             ENDCG
         }

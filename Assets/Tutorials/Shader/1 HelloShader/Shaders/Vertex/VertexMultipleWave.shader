@@ -38,11 +38,6 @@ Shader "Custom/Unlit/Vertex/MultipleWave"
                 float2 uv : TEXCOORD0;
             };
 
-            float inverseLerp(float a, float b, float v)
-            {
-                return (v-a)/(b-a);
-            }
-
             float remapToColor(float x)
             {
                 return (x + 1) * 0.5;
@@ -54,15 +49,19 @@ Shader "Custom/Unlit/Vertex/MultipleWave"
                 return 1 - max(abs(uv.x), abs(uv.y));
             }
 
+            float wave(float2 uv)
+            {
+                const float timeOffset = _Time.y * _Speed;
+                const float waveX = cos((uv.x - timeOffset) * TAU * _WaveCount);
+                const float waveY = cos((uv.y - timeOffset) * TAU * _WaveCount);
+                return waveX * waveY;
+            }
+
             Interpolators vert (VertexData v)
             {
                 Interpolators output;
 
-                const float gradient = falloffMap(v.uv);
-                const float timeOffset = _Time.y * _Speed;
-                const float waveX = cos((v.uv.x - timeOffset) * TAU * _WaveCount);
-                const float waveY = cos((v.uv.y - timeOffset) * TAU * _WaveCount);
-                v.vertex.z = waveX * waveY * gradient * _WaveAmplitude * 0.001;
+                v.vertex.z = wave(v.uv) * falloffMap(v.uv) * _WaveAmplitude * 0.001;
 
                 output.vertex = UnityObjectToClipPos(v.vertex); // local space to clip space
                 output.uv = v.uv;
@@ -71,12 +70,7 @@ Shader "Custom/Unlit/Vertex/MultipleWave"
 
             float4 frag (Interpolators i) : SV_Target
             {
-                const float gradient = falloffMap(i.uv);
-                const float timeOffset = _Time.y * _Speed;
-                const float waveX = cos((i.uv.x - timeOffset) * TAU * _WaveCount);
-                const float waveY = cos((i.uv.y - timeOffset) * TAU * _WaveCount);
-
-                return remapToColor(waveX * waveY) * gradient;
+                return remapToColor(wave(i.uv)) * falloffMap(i.uv);
             }
             ENDCG
         }

@@ -38,27 +38,31 @@ Shader "Custom/Unlit/Vertex/RippleWave"
                 float2 uv : TEXCOORD0;
             };
 
-            float inverseLerp(float a, float b, float v)
-            {
-                return (v-a)/(b-a);
-            }
-
             float remapToColor(float x)
             {
                 return (x + 1) * 0.5;
+            }
+
+            float radialUV(float2 uv)
+            {
+                const float2 uvsCentered = uv * 2 - 1;
+                return length(uvsCentered);
+            }
+
+            float wave(float radialUV)
+            {
+                const float timeOffset = _Time.y * _Speed;
+                return cos((radialUV - timeOffset) * TAU * _WaveCount);
             }
 
             Interpolators vert (VertexData v)
             {
                 Interpolators output;
 
-                const float2 uvsCentered = v.uv * 2 - 1;
-                const float radialLength = length(uvsCentered);
-
+                const float radialLength = radialUV(v.uv);
                 const float gradient = 1 - radialLength;
-                const float timeOffset = _Time.y * _Speed;
-                const float wave = cos((radialLength - timeOffset) * TAU * _WaveCount);
-                v.vertex.z = wave * gradient * _WaveAmplitude * 0.001;
+
+                v.vertex.z = wave(radialLength) * gradient * _WaveAmplitude * 0.001;
 
                 output.vertex = UnityObjectToClipPos(v.vertex); // local space to clip space
                 output.uv = v.uv;
@@ -67,14 +71,12 @@ Shader "Custom/Unlit/Vertex/RippleWave"
 
             float4 frag (Interpolators i) : SV_Target
             {
-                const float2 uvsCentered = i.uv * 2 - 1;
-                const float radialLength = length(uvsCentered);
-
+                const float radialLength = radialUV(i.uv);
                 const float gradient = 1 - radialLength;
-                const float timeOffset = _Time.y * _Speed;
-                const float wave = remapToColor(cos((radialLength - timeOffset) * TAU * _WaveCount));
 
-                return float4(wave.xxx * gradient, 1);
+                const float grayScale = remapToColor(wave(radialLength)) * gradient;
+
+                return float4(grayScale.xxx, 1);
             }
             ENDCG
         }
