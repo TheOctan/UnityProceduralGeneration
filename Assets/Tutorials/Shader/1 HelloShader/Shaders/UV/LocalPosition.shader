@@ -1,4 +1,4 @@
-Shader "Custom/Unlit/NormalMap"
+Shader "Custom/Unlit/UV/LocalPosition"
 {
     SubShader
     {
@@ -15,20 +15,19 @@ Shader "Custom/Unlit/NormalMap"
             struct VertexData
             {
                 float4 vertex : POSITION;   // vertex position
-                float3 normal : NORMAL;
             };
 
             struct Interpolators
             {
                 float4 vertex : SV_POSITION;    // clip space position
-                float3 normal : NORMAL;         // local normal
+                float4 localPosition : TEXCOORD0;
             };
 
             Interpolators vert (VertexData v)
             {
                 Interpolators output;
+                output.localPosition = v.vertex;
                 output.vertex = UnityObjectToClipPos(v.vertex); // local space to clip space
-                output.normal = UnityObjectToWorldNormal(v.normal);
                 return output;
             }
 
@@ -39,7 +38,7 @@ Shader "Custom/Unlit/NormalMap"
 
             float4 frag (Interpolators i) : SV_Target
             {
-                return fixed4(remapToColor(i.normal), 1);
+                return float4(i.localPosition.xyz + 0.5, 1);
             }
             ENDCG
         }
