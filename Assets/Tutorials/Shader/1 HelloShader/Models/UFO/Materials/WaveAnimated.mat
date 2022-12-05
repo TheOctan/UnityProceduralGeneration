@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: WaveAnimated
+  m_Shader: {fileID: 4800000, guid: e5b68b26e68d4844e9e74ca91af775f9, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _ColorEnd: 1
+    - _ColorStart: 0
+    - _ConeOffset: 0.39
+    - _FadeEnd: 1
+    - _FadeStart: 0
+    - _FaderEnd: 1
+    - _Speed: 0.1
+    - _Tiling: 0.1
+    - _WaveAmplitude: 8.19
+    - _WaveCount: 3
+    - _WaveRepeat: 10.55
+    m_Colors:
+    - _ColorA: {r: 0, g: 0.034482718, b: 1, a: 1}
+    - _ColorB: {r: 0, g: 0.7196946, b: 1, a: 1}
+  m_BuildTextureStacks: []
