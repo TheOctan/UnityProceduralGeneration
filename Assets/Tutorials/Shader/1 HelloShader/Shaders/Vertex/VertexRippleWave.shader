@@ -46,7 +46,7 @@ Shader "Custom/Unlit/Vertex/RippleWave"
             float radialUV(float2 uv)
             {
                 const float2 uvsCentered = uv * 2 - 1;
-                return length(uvsCentered);
+                return min(1, length(uvsCentered));
             }
 
             float wave(float radialUV)
