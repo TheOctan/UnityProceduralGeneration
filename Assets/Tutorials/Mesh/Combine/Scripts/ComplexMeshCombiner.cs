@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace OctanGames.Tutorials.Mesh.Combine.Scripts
+namespace OctanGames.Tutorials.MeshCombine
 {
     public class ComplexMeshCombiner : MonoBehaviour
     {

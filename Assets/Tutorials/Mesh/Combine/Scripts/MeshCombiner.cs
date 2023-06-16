@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace OctanGames.Tutorials.Mesh.Combine.Scripts
+namespace OctanGames.Tutorials.MeshCombine
 {
     [RequireComponent(typeof(MeshFilter))]
     [RequireComponent(typeof(MeshRenderer))]
@@ -20,7 +20,7 @@ namespace OctanGames.Tutorials.Mesh.Combine.Scripts
                 meshFilters[i].gameObject.SetActive(false);
             }
 
-            var mesh = new UnityEngine.Mesh();
+            var mesh = new Mesh();
             mesh.CombineMeshes(combine);
             GetComponent<MeshFilter>().sharedMesh = mesh;
             GetComponent<MeshRenderer>().material = _material;
